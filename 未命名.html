@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>厦门市第九中学教案本</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <!-- 引入Font Awesome图标 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  <style type="text/tailwindcss">
+    @theme {
+      --color-primary: #4a6fa5;   /* 主色调：深蓝色，体现教育的专业与稳重 */
+      --color-secondary: #f9fafb; /* 辅助色：浅灰，作为背景更柔和 */
+      --font-sans: 'Microsoft Yahei', sans-serif; /* 中文字体 */
+    }
+    @utility smooth-scroll {
+      scroll-behavior: smooth; /* 平滑滚动 */
+    }
+    body {
+      font-family: var(--font-sans);
+    }
+    .cover {
+      background: linear-gradient(135deg, var(--color-primary), #6b8abf); /* 渐变背景增强视觉 */
+    }
+    .section-title {
+      @apply text-2xl font-bold text-primary mb-4 border-b-2 border-primary/50 pb-2;
+    }
+    table {
+      @apply w-full border-collapse;
+    }
+    th, td {
+      @apply border border-gray-300 p-3 text-left;
+    }
+    th {
+      @apply bg-primary/10 font-semibold;
+    }
+    .form-group {
+      @apply mb-4;
+    }
+    label {
+      @apply block text-gray-700 mb-2;
+    }
+    input, textarea {
+      @apply w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all;
+    }
+    textarea {
+      @apply min-h-[120px] resize-y;
+    }
+    .nav-link {
+      @apply px-4 py-2 border-b-2 border-transparent hover:text-primary transition-colors duration-300;
+    }
+    .nav-link.active {
+      @apply border-primary text-primary font-medium;
+    }
+  </style>
+</head>
+<body class="smooth-scroll bg-secondary">
+  <!-- 导航栏：固定顶部，方便跳转 -->
+  <nav class="bg-primary text-white shadow-md sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold">厦门市第九中学教案本</h1>
+      <div class="flex space-x-4">
+        <a href="#cover" class="nav-link"><i class="fas fa-home mr-1"></i>封面</a>
+        <a href="#directory" class="nav-link"><i class="fas fa-list mr-1"></i>目录</a>
+        <a href="#lesson" class="nav-link"><i class="fas fa-book mr-1"></i>教案</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 封面区域：展示学校和教案本信息，可填写学科、年级等 -->
+  <section id="cover" class="cover text-white py-16">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-8">厦门市第九中学</h2>
+      <h3 class="text-3xl font-bold mb-12">教案本</h3>
+      <div class="max-w-md mx-auto bg-white/10 rounded-lg p-6 backdrop-blur-sm">
+        <div class="form-group">
+          <label for="subject">学 科：</label>
+          <input type="text" id="subject" class="bg-white/20 text-white placeholder-white/70" placeholder="请输入学科">
+        </div>
+        <div class="form-group">
+          <label for="grade">年 级：</label>
+          <input type="text" id="grade" class="bg-white/20 text-white placeholder-white/70" placeholder="请输入年级">
+        </div>
+        <div class="form-group">
+          <label for="class">班 级：</label>
+          <input type="text" id="class" class="bg-white/20 text-white placeholder-white/70" placeholder="请输入班级">
+        </div>
+        <div class="form-group">
+          <label for="academic-year">学年度：</label>
+          <input type="text" id="academic-year" class="bg-white/20 text-white placeholder-white/70" placeholder="例如：2025-2026学年">
+        </div>
+        <div class="form-group">
+          <label for="teacher">教 师：</label>
+          <input type="text" id="teacher" class="bg-white/20 text-white placeholder-white/70" placeholder="请输入教师姓名">
+        </div>
+        <div class="mt-8 text-lg">
+          <p>当前日期：2025年10月01日 星期三</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 目录区域：表格形式管理课题与页码 -->
+  <section id="directory" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="section-title">教案目录</h2>
+      <div class="overflow-x-auto">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>课 题</th>
+              <th>页码</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 教案详情区域：完整的教案编写模块 -->
+  <section id="lesson" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <h2 class="section-title">教案详情</h2>
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <!-- 备课基础信息 -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-primary mb-4">备课信息</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="lesson-topic">课 题：</label>
+              <input type="text" id="lesson-topic" class="w-full" placeholder="输入课题">
+            </div>
+            <div>
+              <label for="prepare-time">备课时间：</label>
+              <input type="text" id="prepare-time" class="w-full" placeholder="输入备课时间">
+            </div>
+            <div>
+              <label for="class-hours">课 时 数：</label>
+              <input type="text" id="class-hours" class="w-full" placeholder="输入课时数">
+            </div>
+          </div>
+          <div class="mt-4">
+            <label for="curriculum-require">课标要求：</label>
+            <textarea id="curriculum-require" placeholder="输入课标要求"></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="literacy-target">素养目标：</label>
+            <textarea id="literacy-target" placeholder="输入素养目标"></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="key-points">重 点：</label>
+            <textarea id="key-points" placeholder="输入教学重点"></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="difficult-points">难 点：</label>
+            <textarea id="difficult-points" placeholder="输入教学难点"></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="student-analysis">学情分析：</label>
+            <textarea id="student-analysis" placeholder="输入学情分析"></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="teaching-strategy">教学策略：</label>
+            <textarea id="teaching-strategy" placeholder="输入教学策略"></textarea>
+          </div>
+          <div class="mt-4">
+            <label for="teaching-resources">教学资源：</label>
+            <textarea id="teaching-resources" placeholder="输入教学资源"></textarea>
+          </div>
+        </div>
+
+        <!-- 教学过程（教师/学生活动+设计意图） -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-primary mb-4">教学过程</h3>
+          <div class="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th class="w-1/3">教师活动</th>
+                  <th class="w-1/3">学生活动</th>
+                  <th class="w-1/3">设计意图</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><textarea class="w-full" placeholder="教师活动内容"></textarea></td>
+                  <td><textarea class="w-full" placeholder="学生活动内容"></textarea></td>
+                  <td><textarea class="w-full" placeholder="设计意图"></textarea></td>
+                </tr>
+                <tr>
+                  <td><textarea class="w-full" placeholder="教师活动内容"></textarea></td>
+                  <td><textarea class="w-full" placeholder="学生活动内容"></textarea></td>
+                  <td><textarea class="w-full" placeholder="设计意图"></textarea></td>
+                </tr>
+                <tr>
+                  <td><textarea class="w-full" placeholder="教师活动内容"></textarea></td>
+                  <td><textarea class="w-full" placeholder="学生活动内容"></textarea></td>
+                  <td><textarea class="w-full" placeholder="设计意图"></textarea></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 板书设计 + 教学反思 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-4">板书设计</h3>
+            <textarea class="w-full h-40" placeholder="输入板书设计"></textarea>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-primary mb-4">教学反思</h3>
+            <textarea class="w-full h-40" placeholder="输入教学反思"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚：简洁的版权信息 -->
+  <footer class="bg-primary text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+      <p>厦门市第九中学 © 2025</p>
+      <p class="mt-2">教案本系统 | 教育信息化</p>
+    </div>
+  </footer>
+</body>
+</html>
