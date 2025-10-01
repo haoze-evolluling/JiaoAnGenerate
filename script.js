@@ -81,6 +81,36 @@ function initFormPersistence() {
       });
     }
   });
+  
+  // 处理教学过程表格中的textarea（没有id的）
+  initTeachingProcessPersistence();
+}
+
+/**
+ * 初始化教学过程表格的持久化
+ */
+function initTeachingProcessPersistence() {
+  const processTable = document.querySelector('#lesson table tbody');
+  if (!processTable) return;
+  
+  const rows = processTable.querySelectorAll('tr');
+  
+  // 从localStorage加载教学过程数据
+  rows.forEach((row, rowIndex) => {
+    const textareas = row.querySelectorAll('textarea');
+    textareas.forEach((textarea, colIndex) => {
+      const storageKey = `lessonPlan_teachingProcess_${rowIndex}_${colIndex}`;
+      const savedValue = localStorage.getItem(storageKey);
+      if (savedValue) {
+        textarea.value = savedValue;
+      }
+      
+      // 监听输入变化，自动保存
+      textarea.addEventListener('input', function() {
+        localStorage.setItem(storageKey, this.value);
+      });
+    });
+  });
 }
 
 /**
@@ -766,9 +796,18 @@ function fillGeneratedContent(content) {
       content.teachingProcess.forEach((process, index) => {
         if (index < rows.length) {
           const textareas = rows[index].querySelectorAll('textarea');
-          if (textareas[0]) textareas[0].value = process.teacherActivity || '';
-          if (textareas[1]) textareas[1].value = process.studentActivity || '';
-          if (textareas[2]) textareas[2].value = process.designIntent || '';
+          if (textareas[0]) {
+            textareas[0].value = process.teacherActivity || '';
+            localStorage.setItem(`lessonPlan_teachingProcess_${index}_0`, process.teacherActivity || '');
+          }
+          if (textareas[1]) {
+            textareas[1].value = process.studentActivity || '';
+            localStorage.setItem(`lessonPlan_teachingProcess_${index}_1`, process.studentActivity || '');
+          }
+          if (textareas[2]) {
+            textareas[2].value = process.designIntent || '';
+            localStorage.setItem(`lessonPlan_teachingProcess_${index}_2`, process.designIntent || '');
+          }
         }
       });
     }
@@ -807,6 +846,19 @@ function clearAllLessonContent() {
       }
     }
   });
+  
+  // 清空教学过程表格的缓存
+  const processTable = document.querySelector('#lesson table tbody');
+  if (processTable) {
+    const rows = processTable.querySelectorAll('tr');
+    rows.forEach((row, rowIndex) => {
+      const textareas = row.querySelectorAll('textarea');
+      textareas.forEach((textarea, colIndex) => {
+        textarea.value = '';
+        localStorage.removeItem(`lessonPlan_teachingProcess_${rowIndex}_${colIndex}`);
+      });
+    });
+  }
   
   alert('所有内容已清空！');
 }
