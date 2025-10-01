@@ -140,28 +140,28 @@ async function callDeepSeekAPI(apiKey, coverData) {
 
 请生成以下内容（使用JSON格式返回）：
 {
-  "curriculumRequire": "课标要求内容（200-300字）",
+  "curriculumRequire": "课标要求内容（600-800字）",
   "literacyTarget": "素养目标内容（3-4个具体目标，每个目标单独一行）",
-  "keyPoints": "教学重点（150-200字）",
-  "difficultPoints": "教学难点（150-200字）",
-  "studentAnalysis": "学情分析（200-300字）",
-  "teachingStrategy": "教学策略（200-300字）",
+  "keyPoints": "教学重点（650-800字）",
+  "difficultPoints": "教学难点（600-750字）",
+  "studentAnalysis": "学情分析（800-1000字）",
+  "teachingStrategy": "教学策略（1000-1200字）",
   "teachingResources": "教学资源（列举5-8项具体资源）",
   "teachingProcess": [
     {
-      "teacherActivity": "教师活动内容",
-      "studentActivity": "学生活动内容",
-      "designIntent": "设计意图"
+      "teacherActivity": "教师活动内容（每个环节150-200字）",
+      "studentActivity": "学生活动内容（每个环节150-200字）",
+      "designIntent": "设计意图（每个环节100-150字）"
     }
   ],
-  "blackboardDesign": "板书设计内容（清晰的结构化内容）",
-  "reflection": "教学反思（200-300字）"
+  "blackboardDesign": "板书设计内容（清晰的结构化内容，400-600字）",
+  "reflection": "教学反思（900-1200字）"
 }
 
 要求：
 1. 内容要详实、专业，符合新课标要求
 2. 素养目标要具体、可操作、可评估
-3. 教学过程要包含3-5个环节，每个环节要详细
+3. 教学过程要包含8-10个环节，每个环节要详细
 4. 所有内容要符合${coverData.grade}学生的认知水平
 5. 返回标准的JSON格式，不要有额外的文字说明`;
 
