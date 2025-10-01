@@ -18,8 +18,8 @@
       <h1 class="text-xl font-bold">厦门市第九中学教案本</h1>
       <div class="flex space-x-4">
         <a href="#cover" class="nav-link"><i class="fas fa-home mr-1"></i>封面</a>
-        <a href="#directory" class="nav-link"><i class="fas fa-list mr-1"></i>目录</a>
         <a href="#lesson" class="nav-link"><i class="fas fa-book mr-1"></i>教案</a>
+        <a href="#directory" class="nav-link"><i class="fas fa-list mr-1"></i>目录</a>
       </div>
     </div>
   </nav>
@@ -101,76 +101,6 @@
     </div>
   </section>
 
-  <!-- 目录区域：表格形式管理课题与页码 -->
-  <section id="directory" class="py-16 bg-gradient-to-br from-white to-gray-50">
-    <div class="container mx-auto px-4">
-      <h2 class="section-title text-2xl font-bold text-primary mb-6 pb-3">教案目录</h2>
-      <div class="overflow-x-auto glass-card rounded-2xl p-6">
-        <table>
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>课 题</th>
-              <th>页码</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>9</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-            <tr>
-              <td>10</td>
-              <td><input type="text" class="w-full" placeholder="输入课题"></td>
-              <td><input type="text" class="w-full" placeholder="输入页码"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
   <!-- 教案详情区域：完整的教案编写模块 -->
   <section id="lesson" class="py-16 bg-gradient-to-br from-gray-50 to-white">
     <div class="container mx-auto px-4">
@@ -183,9 +113,9 @@
             <div class="form-group">
               <div class="flex items-center">
                 <label for="lesson-topic" class="inline-block w-20 text-right mr-2 mb-0">
-                  课题：
+                  课题信息：
                 </label>
-                <input type="text" id="lesson-topic" class="flex-1" placeholder="输入课题">
+                <input type="text" id="lesson-topic" class="flex-1 ml-4" placeholder="输入课题">
               </div>
             </div>
             <div class="form-group">
@@ -307,6 +237,76 @@
             <textarea class="w-full h-40" placeholder="输入教学反思"></textarea>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 目录区域：表格形式管理课题与页码 -->
+  <section id="directory" class="py-16 bg-gradient-to-br from-white to-gray-50">
+    <div class="container mx-auto px-4">
+      <h2 class="section-title text-2xl font-bold text-primary mb-6 pb-3">教案目录</h2>
+      <div class="overflow-x-auto glass-card rounded-2xl p-6">
+        <table>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>课 题</th>
+              <th>页码</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><input type="text" class="w-full" placeholder="输入课题"></td>
+              <td><input type="text" class="w-full" placeholder="输入页码"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
