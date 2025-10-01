@@ -70,8 +70,32 @@
             </div>
           </div>
         </div>
-        <div class="mt-8 text-lg" style="animation: fadeIn 1.2s ease forwards;">
-          <p class="bg-white/10 rounded-lg py-2 px-4 inline-block backdrop-blur-sm">当前日期：2025年10月01日 星期三</p>
+
+
+        <!-- AI智能生成区域 -->
+        <div class="mt-8" style="animation: fadeIn 1.4s ease forwards;">
+          <div class="form-group">
+            <div class="grid grid-cols-5 items-center">
+              <label for="api-key" class="col-span-1 text-right pr-6">API密钥：</label>
+              <div class="col-span-4 px-2">
+                <input type="password" id="api-key" class="w-full" placeholder="DeepSeek API密钥（已预设）">
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-center gap-4 mt-6">
+            <button id="ai-generate-btn" class="ai-generate-btn">
+              <i class="fas fa-magic mr-2"></i>
+              AI智能生成教案
+            </button>
+            <button id="clear-all-btn" class="clear-btn">
+              <i class="fas fa-eraser mr-2"></i>
+              清空所有内容
+            </button>
+          </div>
+          <div id="loading-indicator" class="loading-indicator" style="display: none;">
+            <i class="fas fa-spinner fa-spin mr-2"></i>
+            <span>正在智能生成教案内容，请稍候...</span>
+          </div>
         </div>
       </div>
     </div>
