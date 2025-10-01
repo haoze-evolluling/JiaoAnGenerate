@@ -217,10 +217,10 @@ function printLessonPlan() {
 }
 
 /**
- * 导出教案为HTML格式
- * 参考旧版本模板格式，生成完整的HTML文档
+ * 导出教案为PDF格式
+ * 使用浏览器打印功能生成PDF
  */
-function exportLessonPlanToHTML() {
+function exportLessonPlanToPDF() {
   try {
     // 获取所有教案数据
     const lessonData = collectLessonData();
@@ -228,27 +228,51 @@ function exportLessonPlanToHTML() {
     // 生成HTML内容
     const htmlContent = generateHTMLTemplate(lessonData);
     
-    // 创建Blob并下载
-    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
+    // 创建一个隐藏的iframe
+    const printFrame = document.createElement('iframe');
+    printFrame.style.position = 'fixed';
+    printFrame.style.right = '0';
+    printFrame.style.bottom = '0';
+    printFrame.style.width = '0';
+    printFrame.style.height = '0';
+    printFrame.style.border = '0';
+    document.body.appendChild(printFrame);
     
-    // 生成文件名
-    const subject = lessonData.subject || '学科';
-    const grade = lessonData.grade || '年级';
-    const lessonTopic = lessonData.lessonTopic || '课题';
-    const date = new Date().toLocaleDateString('zh-CN').replace(/\//g, '-');
-    link.download = `厦门九中教案_${subject}_${grade}_${lessonTopic}_${date}.html`;
+    // 写入HTML内容
+    const frameDoc = printFrame.contentWindow.document;
+    frameDoc.open();
+    frameDoc.write(htmlContent);
+    frameDoc.close();
     
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    // 等待内容加载完成后打印
+    printFrame.onload = function() {
+      setTimeout(() => {
+        printFrame.contentWindow.focus();
+        printFrame.contentWindow.print();
+        
+        // 打印完成后移除iframe（延迟移除以确保打印对话框正常显示）
+        setTimeout(() => {
+          document.body.removeChild(printFrame);
+        }, 1000);
+      }, 500);
+    };
     
-    alert('教案导出成功！');
+    // 如果onload未触发，使用备用方案
+    setTimeout(() => {
+      if (printFrame.contentWindow) {
+        printFrame.contentWindow.focus();
+        printFrame.contentWindow.print();
+        
+        setTimeout(() => {
+          if (printFrame.parentNode) {
+            document.body.removeChild(printFrame);
+          }
+        }, 1000);
+      }
+    }, 1000);
+    
   } catch (error) {
-    console.error('HTML导出失败:', error);
+    console.error('PDF导出失败:', error);
     alert('教案导出失败，请重试。错误信息：' + error.message);
   }
 }
@@ -413,6 +437,40 @@ function generateHTMLTemplate(data) {
             color: #999;
             font-style: italic;
         }
+        
+        /* 打印专用样式 */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                max-width: 100%;
+                padding: 20px;
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .title {
+                page-break-after: avoid;
+            }
+            .section-title {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            .footer {
+                page-break-before: avoid;
+            }
+            @page {
+                margin: 1.5cm;
+                size: A4;
+            }
+        }
     </style>
 </head>
 <body>
@@ -541,10 +599,10 @@ function initAIGeneration() {
     generateBtn.addEventListener('click', () => generateLessonPlanWithAI());
   }
   
-  // 绑定导出HTML按钮事件
-  const exportHtmlBtn = document.getElementById('export-html-btn');
-  if (exportHtmlBtn) {
-    exportHtmlBtn.addEventListener('click', () => exportLessonPlanToHTML());
+  // 绑定导出PDF按钮事件
+  const exportPdfBtn = document.getElementById('export-pdf-btn');
+  if (exportPdfBtn) {
+    exportPdfBtn.addEventListener('click', () => exportLessonPlanToPDF());
   }
   
   // 绑定清空按钮事件
