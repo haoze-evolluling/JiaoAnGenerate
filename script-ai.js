@@ -360,8 +360,11 @@ function exportLessonPlanToPDF() {
     
     // 生成HTML内容
     const htmlContent = generateHTMLTemplate(lessonData);
+
+    // 为提升稳定性，提前强制触发重排
+    void document.body.offsetHeight;
     
-    // 创建一个隐藏的iframe
+    // 创建一个隐藏的iframe并使用srcdoc加载内容，监听打印完成清理资源
     const printFrame = document.createElement('iframe');
     printFrame.style.position = 'fixed';
     printFrame.style.right = '0';
@@ -370,39 +373,58 @@ function exportLessonPlanToPDF() {
     printFrame.style.height = '0';
     printFrame.style.border = '0';
     document.body.appendChild(printFrame);
-    
-    // 写入HTML内容
-    const frameDoc = printFrame.contentWindow.document;
-    frameDoc.open();
-    frameDoc.write(htmlContent);
-    frameDoc.close();
-    
-    // 等待内容加载完成后打印
-    printFrame.onload = function() {
-      setTimeout(() => {
-        printFrame.contentWindow.focus();
-        printFrame.contentWindow.print();
-        
-        // 打印完成后移除iframe（延迟移除以确保打印对话框正常显示）
-        setTimeout(() => {
-          document.body.removeChild(printFrame);
-        }, 1000);
-      }, 500);
-    };
-    
-    // 如果onload未触发，使用备用方案
-    setTimeout(() => {
-      if (printFrame.contentWindow) {
-        printFrame.contentWindow.focus();
-        printFrame.contentWindow.print();
-        
-        setTimeout(() => {
-          if (printFrame.parentNode) {
-            document.body.removeChild(printFrame);
+
+    const cleanup = () => {
+      if (printFrame && printFrame.parentNode) {
+        try {
+          // 移除事件监听，避免泄漏
+          if (printFrame.contentWindow) {
+            printFrame.contentWindow.onafterprint = null;
+            printFrame.contentWindow.onbeforeunload = null;
           }
-        }, 1000);
+        } catch (_) {}
+        printFrame.parentNode.removeChild(printFrame);
       }
-    }, 1000);
+    };
+
+    printFrame.onload = function() {
+      try {
+        const frameWindow = printFrame.contentWindow;
+        if (!frameWindow) {
+          cleanup();
+          return;
+        }
+
+        // 打印完成后清理
+        frameWindow.onafterprint = () => {
+          // 给予系统时间关闭打印对话框
+          setTimeout(cleanup, 300);
+        };
+
+        // 某些浏览器会在关闭iframe前触发unload，做兜底清理
+        frameWindow.onbeforeunload = () => {
+          setTimeout(cleanup, 300);
+        };
+
+        // 等待一帧确保布局完成
+        frameWindow.focus();
+        frameWindow.requestAnimationFrame(() => {
+          setTimeout(() => {
+            try {
+              frameWindow.print();
+            } catch (_) {
+              // 打印异常兜底清理
+              setTimeout(cleanup, 500);
+            }
+          }, 100);
+        });
+      } catch (_) {
+        cleanup();
+      }
+    };
+
+    // 通过srcdoc载入内容，保证onload可靠触发
+    printFrame.srcdoc = htmlContent;
     
   } catch (error) {
     console.error('PDF导出失败:', error);
@@ -470,9 +492,6 @@ function collectLessonData() {
  * 使用newja.html的模板格式
  */
 function generateHTMLTemplate(data) {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
   
   // 生成教学过程HTML - 分配到两页
   let teachingProcessPage1 = '';
@@ -489,30 +508,36 @@ function generateHTMLTemplate(data) {
     const secondHalf = data.teachingProcess.slice(midPoint);
     
     // 生成第一页内容
-    teachingProcessPage1 = firstHalf.map(process => `
-                    ${escapeHtml(process.teacherActivity || '')}
-                `).join('\n\n');
+    teachingProcessPage1 = firstHalf.map((process, index) => {
+      const content = process.teacherActivity || '';
+      return content ? `【环节${index + 1}】\n${escapeHtml(content)}` : '';
+    }).filter(content => content).join('\n\n');
     
-    studentActivityPage1 = firstHalf.map(process => `
-                    ${escapeHtml(process.studentActivity || '')}
-                `).join('\n\n');
+    studentActivityPage1 = firstHalf.map((process, index) => {
+      const content = process.studentActivity || '';
+      return content ? `【环节${index + 1}】\n${escapeHtml(content)}` : '';
+    }).filter(content => content).join('\n\n');
     
-    designIntentPage1 = firstHalf.map(process => `
-                    ${escapeHtml(process.designIntent || '')}
-                `).join('\n\n');
+    designIntentPage1 = firstHalf.map((process, index) => {
+      const content = process.designIntent || '';
+      return content ? `【环节${index + 1}】\n${escapeHtml(content)}` : '';
+    }).filter(content => content).join('\n\n');
     
     // 生成第二页内容
-    teachingProcessPage2 = secondHalf.map(process => `
-                    ${escapeHtml(process.teacherActivity || '')}
-                `).join('\n\n');
+    teachingProcessPage2 = secondHalf.map((process, index) => {
+      const content = process.teacherActivity || '';
+      return content ? `【环节${firstHalf.length + index + 1}】\n${escapeHtml(content)}` : '';
+    }).filter(content => content).join('\n\n');
     
-    studentActivityPage2 = secondHalf.map(process => `
-                    ${escapeHtml(process.studentActivity || '')}
-                `).join('\n\n');
+    studentActivityPage2 = secondHalf.map((process, index) => {
+      const content = process.studentActivity || '';
+      return content ? `【环节${firstHalf.length + index + 1}】\n${escapeHtml(content)}` : '';
+    }).filter(content => content).join('\n\n');
     
-    designIntentPage2 = secondHalf.map(process => `
-                    ${escapeHtml(process.designIntent || '')}
-                `).join('\n\n');
+    designIntentPage2 = secondHalf.map((process, index) => {
+      const content = process.designIntent || '';
+      return content ? `【环节${firstHalf.length + index + 1}】\n${escapeHtml(content)}` : '';
+    }).filter(content => content).join('\n\n');
   }
   
   return `<!DOCTYPE html>
@@ -601,13 +626,6 @@ function generateHTMLTemplate(data) {
         padding-left: 10px;
         min-height: 1.2em;
     }
-    .date-section {
-        font-size: 24px;
-        color: #465d87;
-        letter-spacing: 15px;
-        margin-top: auto;
-        margin-bottom: 50px;
-    }
 
     .toc-page {
         display: flex;
@@ -619,8 +637,8 @@ function generateHTMLTemplate(data) {
         font-size: 36px;
         font-weight: bold;
         letter-spacing: 10px;
-        margin-top: 50px;
-        margin-bottom: 40px;
+        margin-top: 30px;
+        margin-bottom: 20px;
     }
 
     .content-table, .detail-table, .process-table {
@@ -642,11 +660,11 @@ function generateHTMLTemplate(data) {
 
     .content-table th {
         font-weight: normal;
-        height: 45px;
+        height: 40px;
         background-color: #fff;
     }
     .content-table td {
-        height: 48px;
+        height: 40px;
     }
     .content-table .col-seq { 
         width: 12%;
@@ -774,15 +792,17 @@ function generateHTMLTemplate(data) {
 
     .process-table-main tbody td {
         border: 1px solid #000;
-        padding: 10px;
+        padding: 12px;
         vertical-align: top;
         text-align: left;
-        font-size: 18px;
-        line-height: 1.8;
+        font-size: 16px;
+        line-height: 1.6;
         box-sizing: border-box;
         word-wrap: break-word;
         overflow-wrap: break-word;
         white-space: pre-wrap;
+        text-indent: 0;
+        letter-spacing: 0.5px;
     }
 
     .process-table-main tbody td:nth-child(1) {
@@ -831,17 +851,12 @@ function generateHTMLTemplate(data) {
     }
 
     .page-footer {
-        position: absolute;
-        bottom: 30px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-size: 16px;
-        color: #000;
+        display: none;
     }
 
-    .cover-page ~ .page-footer {
-        display: none;
+    @page {
+        size: A4;
+        margin: 0;
     }
 
     @media print {
@@ -854,6 +869,8 @@ function generateHTMLTemplate(data) {
             margin: 0;
             page-break-after: always;
             box-shadow: none;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
         .page:last-child {
             page-break-after: auto;
@@ -894,9 +911,6 @@ function generateHTMLTemplate(data) {
             <div class="info-line"><span>学年度</span>: <div class="line-content">${escapeHtml(data.academicYear || '')}</div></div>
             <div class="info-line"><span>教 师</span>: <div class="line-content">${escapeHtml(data.teacher || '')}</div></div>
         </div>
-        <div class="date-section">
-            ${year}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${month}月
-        </div>
     </div>
 </div>
 
@@ -928,7 +942,6 @@ function generateHTMLTemplate(data) {
             <tr><td>15</td><td></td><td></td></tr>
         </tbody>
     </table>
-    <div class="page-footer">第 2 页</div>
 </div>
 
 <div class="page">
@@ -974,7 +987,6 @@ function generateHTMLTemplate(data) {
             </tr>
         </tbody>
     </table>
-    <div class="page-footer">第 3 页</div>
 </div>
 
 <div class="page">
@@ -999,7 +1011,6 @@ function generateHTMLTemplate(data) {
             </tbody>
         </table>
     </div>
-    <div class="page-footer">第 4 页</div>
 </div>
 
 <div class="page">
@@ -1034,7 +1045,6 @@ function generateHTMLTemplate(data) {
             </tr>
         </table>
     </div>
-    <div class="page-footer">第 5 页</div>
 </div>
 
 </body>
