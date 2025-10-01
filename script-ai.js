@@ -493,50 +493,26 @@ function collectLessonData() {
  */
 function generateHTMLTemplate(data) {
   
-  // 生成教学过程HTML - 分配到两页
-  let teachingProcessPage1 = '';
-  let teachingProcessPage2 = '';
-  let studentActivityPage1 = '';
-  let designIntentPage1 = '';
-  let studentActivityPage2 = '';
-  let designIntentPage2 = '';
+  // 生成教学过程HTML - 合并到一个表格
+  let teachingProcessContent = '';
+  let studentActivityContent = '';
+  let designIntentContent = '';
   
   if (data.teachingProcess && data.teachingProcess.length > 0) {
-    // 第一页显示前半部分
-    const midPoint = Math.ceil(data.teachingProcess.length / 2);
-    const firstHalf = data.teachingProcess.slice(0, midPoint);
-    const secondHalf = data.teachingProcess.slice(midPoint);
-    
-    // 生成第一页内容
-    teachingProcessPage1 = firstHalf.map((process, index) => {
+    // 合并所有教学过程内容
+    teachingProcessContent = data.teachingProcess.map((process, index) => {
       const content = process.teacherActivity || '';
       return content ? `【环节${index + 1}】\n${escapeHtml(content)}` : '';
     }).filter(content => content).join('\n\n');
     
-    studentActivityPage1 = firstHalf.map((process, index) => {
+    studentActivityContent = data.teachingProcess.map((process, index) => {
       const content = process.studentActivity || '';
       return content ? `【环节${index + 1}】\n${escapeHtml(content)}` : '';
     }).filter(content => content).join('\n\n');
     
-    designIntentPage1 = firstHalf.map((process, index) => {
+    designIntentContent = data.teachingProcess.map((process, index) => {
       const content = process.designIntent || '';
       return content ? `【环节${index + 1}】\n${escapeHtml(content)}` : '';
-    }).filter(content => content).join('\n\n');
-    
-    // 生成第二页内容
-    teachingProcessPage2 = secondHalf.map((process, index) => {
-      const content = process.teacherActivity || '';
-      return content ? `【环节${firstHalf.length + index + 1}】\n${escapeHtml(content)}` : '';
-    }).filter(content => content).join('\n\n');
-    
-    studentActivityPage2 = secondHalf.map((process, index) => {
-      const content = process.studentActivity || '';
-      return content ? `【环节${firstHalf.length + index + 1}】\n${escapeHtml(content)}` : '';
-    }).filter(content => content).join('\n\n');
-    
-    designIntentPage2 = secondHalf.map((process, index) => {
-      const content = process.designIntent || '';
-      return content ? `【环节${firstHalf.length + index + 1}】\n${escapeHtml(content)}` : '';
     }).filter(content => content).join('\n\n');
   }
   
@@ -560,7 +536,7 @@ function generateHTMLTemplate(data) {
     }
     .page {
         width: 794px;
-        height: 1123px;
+        min-height: 1123px;
         border: 1px solid #ccc;
         margin-bottom: 20px;
         padding: 60px;
@@ -571,6 +547,9 @@ function generateHTMLTemplate(data) {
         flex-direction: column;
         position: relative;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .page.fixed-height {
+        height: 1123px;
     }
     .cover-page {
         display: flex;
@@ -686,7 +665,7 @@ function generateHTMLTemplate(data) {
     }
 
     .detail-table td {
-        vertical-align: middle;
+        vertical-align: top;
         padding: 8px;
     }
     .detail-table .row-header {
@@ -697,7 +676,8 @@ function generateHTMLTemplate(data) {
         text-align: center;
         letter-spacing: 5px;
         white-space: nowrap;
-        vertical-align: middle;
+        vertical-align: top;
+        padding-top: 12px;
     }
     
     .detail-table tr:first-child td:nth-child(2) {
@@ -735,13 +715,15 @@ function generateHTMLTemplate(data) {
         padding-left: 10px;
     }
     .detail-table tr:nth-child(1) { height: 50px; }
-    .detail-table tr:nth-child(2) { height: 100px; }
-    .detail-table tr:nth-child(3) { height: 160px; }
-    .detail-table tr:nth-child(4) { height: 80px; }
-    .detail-table tr:nth-child(5) { height: 80px; }
-    .detail-table tr:nth-child(6) { height: 180px; }
-    .detail-table tr:nth-child(7) { height: 100px; }
-    .detail-table tr:nth-child(8) { height: 80px; }
+    .detail-table tr:nth-child(2),
+    .detail-table tr:nth-child(3),
+    .detail-table tr:nth-child(4),
+    .detail-table tr:nth-child(5),
+    .detail-table tr:nth-child(6),
+    .detail-table tr:nth-child(7),
+    .detail-table tr:nth-child(8) {
+        height: auto;
+    }
 
     .process-page-container {
         display: flex;
@@ -873,17 +855,33 @@ function generateHTMLTemplate(data) {
             margin: 0;
             page-break-after: always;
             box-shadow: none;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            height: auto;
+            min-height: auto;
+        }
+        .page.fixed-height {
+            height: 100vh;
+            min-height: 100vh;
+            max-height: 100vh;
         }
         .page:last-child {
+            page-break-after: auto;
+        }
+        .detail-table {
+            page-break-inside: auto;
+        }
+        .detail-table tr {
+            page-break-inside: avoid;
             page-break-after: auto;
         }
     }
 
     .detail-table td:not(.row-header) {
         text-align: left;
-        line-height: 1.8;
+        line-height: 1.6;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+        font-size: 14px;
     }
 
     * {
@@ -902,7 +900,7 @@ function generateHTMLTemplate(data) {
 </head>
 <body>
 
-<div class="page">
+<div class="page fixed-height">
     <div class="cover-page">
         <div>
             <div class="cover-title">厦门市第九中学</div>
@@ -918,7 +916,7 @@ function generateHTMLTemplate(data) {
     </div>
 </div>
 
-<div class="page toc-page">
+<div class="page fixed-height toc-page">
     <h1>教案目录</h1>
     <table class="content-table">
         <thead>
@@ -994,7 +992,7 @@ function generateHTMLTemplate(data) {
 </div>
 
 <div class="page">
-    <table class="process-table-main" style="height: auto; max-height: 100%;">
+    <table class="process-table-main" style="height: auto;">
         <thead>
             <tr>
                 <th colspan="3">教学过程</th>
@@ -1007,31 +1005,9 @@ function generateHTMLTemplate(data) {
         </thead>
         <tbody>
             <tr>
-                <td>${teachingProcessPage1 || ''}</td>
-                <td>${studentActivityPage1 || ''}</td>
-                <td>${designIntentPage1 || ''}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="page">
-    <table class="process-table-main" style="height: auto; max-height: 55%;">
-        <thead>
-            <tr>
-                <th colspan="3">教学过程（续）</th>
-            </tr>
-            <tr>
-                <th>教师活动</th>
-                <th>学生活动</th>
-                <th>设计意图</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>${teachingProcessPage2 || ''}</td>
-                <td>${studentActivityPage2 || ''}</td>
-                <td>${designIntentPage2 || ''}</td>
+                <td>${teachingProcessContent || ''}</td>
+                <td>${studentActivityContent || ''}</td>
+                <td>${designIntentContent || ''}</td>
             </tr>
         </tbody>
     </table>
