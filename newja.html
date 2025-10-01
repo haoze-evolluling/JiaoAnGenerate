@@ -9,7 +9,7 @@
         font-family: 'SimSun', '宋体', serif;
         font-size: 16px;
         color: #000;
-        background-color: #fff;
+        background-color: #f5f5f5;
         margin: 0;
         padding: 20px;
         display: flex;
@@ -28,6 +28,7 @@
         display: flex;
         flex-direction: column;
         position: relative; /* For page number positioning */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     .cover-page {
         display: flex;
@@ -84,6 +85,11 @@
         margin-bottom: 50px;
     }
 
+    .toc-page {
+        display: flex;
+        flex-direction: column;
+    }
+    
     .toc-page h1 {
         text-align: center;
         font-size: 36px;
@@ -97,6 +103,7 @@
         width: 100%;
         border-collapse: collapse;
         border: 2px solid #000;
+        table-layout: fixed; /* 强制表格遵循固定布局 */
     }
 
     .content-table th, .content-table td,
@@ -112,13 +119,24 @@
     .content-table th {
         font-weight: normal;
         height: 45px; /* Adjusted height */
+        background-color: #fff;
     }
     .content-table td {
         height: 48px; /* Kept original height for content rows */
     }
-    .content-table .col-seq { width: 12%; } /* Adjusted width */
-    .content-table .col-title { width: 68%; } /* Adjusted width */
-    .content-table .col-page { width: 20%; }
+    .content-table .col-seq { 
+        width: 12%; /* Adjusted width */
+        text-align: center;
+    }
+    .content-table .col-title { 
+        width: 68%; /* Adjusted width */
+        text-align: left;
+        padding-left: 15px;
+    }
+    .content-table .col-page { 
+        width: 20%;
+        text-align: center;
+    }
 
     .detail-table {
         table-layout: fixed;
@@ -126,94 +144,175 @@
     }
 
     .detail-table td {
-        vertical-align: top; /* Changed to top for better content alignment */
+        vertical-align: middle; /* Center content vertically */
         padding: 8px;
     }
     .detail-table .row-header {
         font-weight: normal;
-        width: 120px; /* Adjusted width */
+        width: 120px; /* Fixed width for header column */
         height: auto; /* Allow content to dictate height */
         padding: 8px;
         text-align: center;
         letter-spacing: 5px;
         white-space: nowrap; /* Prevent text wrapping for headers */
+        vertical-align: middle;
+    }
+    
+    /* Ensure first row cells align properly */
+    .detail-table tr:first-child td:nth-child(2) {
+        width: auto;
+    }
+    .detail-table tr:first-child td:last-child {
+        width: 200px;
     }
     .detail-table .nested-table {
         width: 100%;
         height: 100%;
         border-collapse: collapse;
+        margin: 0;
     }
     .detail-table .nested-table td {
         border: none;
         border-bottom: 1px solid #000;
-        padding: 5px;
+        padding: 8px;
         text-align: left;
+        vertical-align: middle;
+        font-size: 16px;
     }
     .detail-table .nested-table tr:last-child td {
         border-bottom: none;
     }
     .detail-table .nested-table .label {
-        width: 40%; /* Adjusted width */
+        width: 45%; /* Adjusted width */
         border-right: 1px solid #000;
+        text-align: center;
+        letter-spacing: 3px;
     }
     .detail-table .nested-table .value {
-        width: 60%; /* Adjusted width */
+        width: 55%; /* Adjusted width */
+        text-align: left;
+        padding-left: 10px;
     }
     /* Specific row heights to match image proportions */
-    .detail-table tr:nth-child(1) td:nth-child(2) { height: 50px; } /* Topic content cell */
-    .detail-table tr:nth-child(2) td:nth-child(2) { height: 100px; } /* Course requirements */
-    .detail-table tr:nth-child(3) td:nth-child(2) { height: 160px; } /* Literacy goals */
-    .detail-table tr:nth-child(4) td:nth-child(2) { height: 80px; } /* Key points */
-    .detail-table tr:nth-child(5) td:nth-child(2) { height: 80px; } /* Difficulties */
-    .detail-table tr:nth-child(6) td:nth-child(2) { height: 180px; } /* Student analysis */
-    .detail-table tr:nth-child(7) td:nth-child(2) { height: 100px; } /* Teaching strategies */
-    .detail-table tr:nth-child(8) td:nth-child(2) { height: 80px; } /* Teaching resources */
+    .detail-table tr:nth-child(1) { height: 50px; } /* Topic row */
+    .detail-table tr:nth-child(2) { height: 100px; } /* Course requirements */
+    .detail-table tr:nth-child(3) { height: 160px; } /* Literacy goals */
+    .detail-table tr:nth-child(4) { height: 80px; } /* Key points */
+    .detail-table tr:nth-child(5) { height: 80px; } /* Difficulties */
+    .detail-table tr:nth-child(6) { height: 180px; } /* Student analysis */
+    .detail-table tr:nth-child(7) { height: 100px; } /* Teaching strategies */
+    .detail-table tr:nth-child(8) { height: 80px; } /* Teaching resources */
 
+    /* ========== 教学过程表格容器样式 ========== */
     .process-page-container {
         display: flex;
         flex-direction: column;
-        flex-grow: 1; /* Allow content to fill the page */
-    }
-
-    .process-table-main {
         flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .process-table-main .process-header th {
-        height: 45px; /* Consistent header height */
-    }
-
-    .process-table-main .process-body td {
-        flex-grow: 1; /* Allow body cells to expand */
-        vertical-align: top;
-        height: 600px; /* Explicit height for the main content area */
-    }
-
-    .process-table-footer {
         width: 100%;
+    }
+
+    /* ========== 教学过程主表格样式 ========== */
+    .process-table-main {
+        width: 100%;
+        height: 100%;
         border-collapse: collapse;
         border: 2px solid #000;
-        border-top: none; /* Remove top border as it connects to the main table */
-        margin-top: -2px; /* Overlap to combine borders */
+        table-layout: fixed;
     }
-    .process-table-footer td {
+
+    /* 教学过程表格表头通用样式 */
+    .process-table-main thead th {
+        height: 45px;
+        background-color: #fff;
+        font-weight: normal;
         border: 1px solid #000;
         padding: 8px;
         text-align: center;
         font-size: 18px;
+        box-sizing: border-box;
+    }
+
+    /* 第一行表头:"教学过程" */
+    .process-table-main thead tr:first-child th {
+        font-size: 18px;
+        letter-spacing: 2px;
+    }
+
+    /* 第二行表头:三列等宽设置 */
+    .process-table-main thead tr:last-child th:nth-child(1) {
+        width: 33.33%;
+    }
+    
+    .process-table-main thead tr:last-child th:nth-child(2) {
+        width: 33.34%;
+    }
+    
+    .process-table-main thead tr:last-child th:nth-child(3) {
+        width: 33.33%;
+    }
+
+    /* 教学过程表格内容行 */
+    .process-table-main tbody tr {
+        height: 100%;
+    }
+
+    /* 教学过程表格内容单元格样式 */
+    .process-table-main tbody td {
+        border: 1px solid #000;
+        padding: 10px;
         vertical-align: top;
+        text-align: left;
+        font-size: 18px;
+        line-height: 1.8;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* 三列内容等宽设置 */
+    .process-table-main tbody td:nth-child(1) {
+        width: 33.33%;
+    }
+    
+    .process-table-main tbody td:nth-child(2) {
+        width: 33.34%;
+    }
+    
+    .process-table-main tbody td:nth-child(3) {
+        width: 33.33%;
+    }
+
+    /* ========== 教学过程页脚表格样式 ========== */
+    .process-table-footer {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #000;
+        border-top: none;
+        margin-top: -2px;
+        table-layout: fixed;
+    }
+
+    .process-table-footer td {
+        border: 1px solid #000;
+        padding: 10px;
+        text-align: left;
+        font-size: 18px;
+        vertical-align: top;
+        line-height: 1.8;
+        box-sizing: border-box;
     }
 
     .process-table-footer .row-header {
-        width: 120px; /* Consistent header width */
+        width: 120px;
         text-align: center;
         letter-spacing: 5px;
         white-space: nowrap;
+        vertical-align: middle;
     }
+    
     .process-table-footer .footer-content {
-        height: 120px; /* Adjusted height */
+        height: 120px;
+        text-align: left;
     }
 
 
@@ -224,6 +323,51 @@
         right: 0;
         text-align: center;
         font-size: 16px;
+        color: #000;
+    }
+
+    /* Hide page number on cover page */
+    .cover-page ~ .page-footer {
+        display: none;
+    }
+
+    /* Print styles */
+    @media print {
+        body {
+            padding: 0;
+            background-color: white;
+        }
+        .page {
+            border: none;
+            margin: 0;
+            page-break-after: always;
+            box-shadow: none;
+        }
+        .page:last-child {
+            page-break-after: auto;
+        }
+    }
+
+    /* Fix text alignment for better display */
+    .detail-table td:not(.row-header) {
+        text-align: left;
+        line-height: 1.8;
+    }
+
+    /* Improve overall text rendering */
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Ensure consistent table borders */
+    table {
+        border-spacing: 0;
+    }
+
+    /* Add minimum content width to prevent overflow */
+    .detail-table td[colspan] {
+        min-height: 30px;
     }
 </style>
 </head>
@@ -276,6 +420,7 @@
             <tr><td>15</td><td></td><td></td></tr>
         </tbody>
     </table>
+    <div class="page-footer">第 2 页</div>
 </div>
 
 <div class="page">
@@ -283,7 +428,7 @@
         <tbody>
             <tr>
                 <td class="row-header">课题</td>
-                <td colspan="3" style="width: calc(100% - 120px - 200px);"></td>
+                <td colspan="2"></td>
                 <td style="width: 200px;">
                     <table class="nested-table">
                         <tr><td class="label">备课时间</td><td class="value"></td></tr>
@@ -293,51 +438,52 @@
             </tr>
             <tr>
                 <td class="row-header">课标要求</td>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
             </tr>
             <tr>
                 <td class="row-header">素养目标</td>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
             </tr>
             <tr>
                 <td class="row-header">重点</td>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
             </tr>
-             <tr>
+            <tr>
                 <td class="row-header">难点</td>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
             </tr>
             <tr>
                 <td class="row-header">学情分析</td>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
             </tr>
             <tr>
                 <td class="row-header">教学策略</td>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
             </tr>
             <tr>
                 <td class="row-header">教学资源</td>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
             </tr>
         </tbody>
     </table>
-    <div class="page-footer">第 页</div>
+    <div class="page-footer">第 3 页</div>
 </div>
 
+<!-- 教学过程页面 - 第4页 -->
 <div class="page">
     <div class="process-page-container">
-        <table class="process-table process-table-main">
-            <thead class="process-header">
+        <table class="process-table-main">
+            <thead>
                 <tr>
                     <th colspan="3">教学过程</th>
                 </tr>
                 <tr>
-                    <th style="width: 25%;">教师活动</th>
-                    <th style="width: 40%;">学生活动</th>
-                    <th style="width: 35%;">设计意图</th>
+                    <th>教师活动</th>
+                    <th>学生活动</th>
+                    <th>设计意图</th>
                 </tr>
             </thead>
-            <tbody class="process-body">
+            <tbody>
                 <tr>
                     <td></td>
                     <td></td>
@@ -346,23 +492,24 @@
             </tbody>
         </table>
     </div>
-    <div class="page-footer">第 页</div>
+    <div class="page-footer">第 4 页</div>
 </div>
 
+<!-- 教学过程页面 - 第5页 (含板书设计和教学反思) -->
 <div class="page">
     <div class="process-page-container">
-        <table class="process-table process-table-main">
-             <thead class="process-header">
+        <table class="process-table-main">
+            <thead>
                 <tr>
                     <th colspan="3">教学过程</th>
                 </tr>
                 <tr>
-                    <th style="width: 25%;">教师活动</th>
-                    <th style="width: 40%;">学生活动</th>
-                    <th style="width: 35%;">设计意图</th>
+                    <th>教师活动</th>
+                    <th>学生活动</th>
+                    <th>设计意图</th>
                 </tr>
             </thead>
-            <tbody class="process-body">
+            <tbody>
                 <tr>
                     <td></td>
                     <td></td>
@@ -371,17 +518,17 @@
             </tbody>
         </table>
         <table class="process-table-footer">
-             <tr>
-                <td class="row-header" style="height: 120px;">板书设计</td>
+            <tr>
+                <td class="row-header">板书设计</td>
                 <td class="footer-content"></td>
             </tr>
             <tr>
-                <td class="row-header" style="height: 120px;">教学反思</td>
+                <td class="row-header">教学反思</td>
                 <td class="footer-content"></td>
             </tr>
         </table>
     </div>
-    <div class="page-footer">第 页</div>
+    <div class="page-footer">第 5 页</div>
 </div>
 
 
