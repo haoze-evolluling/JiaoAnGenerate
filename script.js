@@ -334,250 +334,588 @@ function collectLessonData() {
 
 /**
  * 生成HTML模板
- * 参考旧版本的模板格式
+ * 使用newja.html的模板格式
  */
 function generateHTMLTemplate(data) {
-  const currentDate = new Date().toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
   
-  // 生成教学过程HTML
-  let teachingProcessHTML = '';
+  // 生成教学过程HTML - 分配到两页
+  let teachingProcessPage1 = '';
+  let teachingProcessPage2 = '';
+  let studentActivityPage1 = '';
+  let designIntentPage1 = '';
+  let studentActivityPage2 = '';
+  let designIntentPage2 = '';
+  
   if (data.teachingProcess && data.teachingProcess.length > 0) {
-    data.teachingProcess.forEach((process, index) => {
-      teachingProcessHTML += `
-            <tr>
-              <td style="border: 1px solid #ddd; padding: 15px; text-align: left; vertical-align: top; background-color: #f8f9fa; font-weight: bold; color: #495057; width: 20%;">环节 ${index + 1}</td>
-              <td style="border: 1px solid #ddd; padding: 15px; text-align: left; vertical-align: top; color: #212529;">
-                <strong>教师活动：</strong><br>${process.teacherActivity || ''}<br><br>
-                <strong>学生活动：</strong><br>${process.studentActivity || ''}<br><br>
-                <strong>设计意图：</strong><br>${process.designIntent || ''}
-              </td>
-            </tr>`;
-    });
+    // 第一页显示前半部分
+    const midPoint = Math.ceil(data.teachingProcess.length / 2);
+    const firstHalf = data.teachingProcess.slice(0, midPoint);
+    const secondHalf = data.teachingProcess.slice(midPoint);
+    
+    // 生成第一页内容
+    teachingProcessPage1 = firstHalf.map(process => `
+                    ${escapeHtml(process.teacherActivity || '')}
+                `).join('\n\n');
+    
+    studentActivityPage1 = firstHalf.map(process => `
+                    ${escapeHtml(process.studentActivity || '')}
+                `).join('\n\n');
+    
+    designIntentPage1 = firstHalf.map(process => `
+                    ${escapeHtml(process.designIntent || '')}
+                `).join('\n\n');
+    
+    // 生成第二页内容
+    teachingProcessPage2 = secondHalf.map(process => `
+                    ${escapeHtml(process.teacherActivity || '')}
+                `).join('\n\n');
+    
+    studentActivityPage2 = secondHalf.map(process => `
+                    ${escapeHtml(process.studentActivity || '')}
+                `).join('\n\n');
+    
+    designIntentPage2 = secondHalf.map(process => `
+                    ${escapeHtml(process.designIntent || '')}
+                `).join('\n\n');
   }
   
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>厦门市第九中学教案 - ${data.lessonTopic || '教案'}</title>
-    <style>
-        body { 
-            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-            background-color: #f5f5f5; 
-            line-height: 1.6; 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>厦门市第九中学教案本 - ${escapeHtml(data.lessonTopic || '教案')}</title>
+<style>
+    body {
+        font-family: 'SimSun', '宋体', serif;
+        font-size: 16px;
+        color: #000;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .page {
+        width: 794px;
+        height: 1123px;
+        border: 1px solid #ccc;
+        margin-bottom: 20px;
+        padding: 60px;
+        box-sizing: border-box;
+        background-color: white;
+        page-break-after: always;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .cover-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        flex-grow: 1;
+    }
+    .cover-title {
+        font-size: 42px;
+        color: #465d87;
+        letter-spacing: 5px;
+        margin-top: 80px;
+    }
+    .cover-subtitle {
+        font-size: 68px;
+        font-weight: bold;
+        color: #465d87;
+        letter-spacing: 20px;
+        margin-top: 60px;
+        margin-bottom: 150px;
+    }
+    .info-section {
+        width: 60%;
+        margin: 0 auto;
+        text-align: left;
+    }
+    .info-line {
+        font-size: 24px;
+        color: #465d87;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+    }
+    .info-line span {
+        width: 100px;
+        display: inline-block;
+        letter-spacing: 8px;
+        text-align: justify;
+        text-align-last: justify;
+        flex-shrink: 0;
+    }
+    .info-line .line {
+        flex-grow: 1;
+        border-bottom: 1px solid #465d87;
+        margin-left: 10px;
+    }
+    .info-line .line-content {
+        flex-grow: 1;
+        border-bottom: 1px solid #465d87;
+        margin-left: 10px;
+        padding-left: 10px;
+        min-height: 1.2em;
+    }
+    .date-section {
+        font-size: 24px;
+        color: #465d87;
+        letter-spacing: 15px;
+        margin-top: auto;
+        margin-bottom: 50px;
+    }
+
+    .toc-page {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .toc-page h1 {
+        text-align: center;
+        font-size: 36px;
+        font-weight: bold;
+        letter-spacing: 10px;
+        margin-top: 50px;
+        margin-bottom: 40px;
+    }
+
+    .content-table, .detail-table, .process-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #000;
+        table-layout: fixed;
+    }
+
+    .content-table th, .content-table td,
+    .detail-table th, .detail-table td,
+    .process-table th, .process-table td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+        font-size: 18px;
+        box-sizing: border-box;
+    }
+
+    .content-table th {
+        font-weight: normal;
+        height: 45px;
+        background-color: #fff;
+    }
+    .content-table td {
+        height: 48px;
+    }
+    .content-table .col-seq { 
+        width: 12%;
+        text-align: center;
+    }
+    .content-table .col-title { 
+        width: 68%;
+        text-align: left;
+        padding-left: 15px;
+    }
+    .content-table .col-page { 
+        width: 20%;
+        text-align: center;
+    }
+
+    .detail-table {
+        table-layout: fixed;
+        margin-top: 20px;
+    }
+
+    .detail-table td {
+        vertical-align: middle;
+        padding: 8px;
+    }
+    .detail-table .row-header {
+        font-weight: normal;
+        width: 120px;
+        height: auto;
+        padding: 8px;
+        text-align: center;
+        letter-spacing: 5px;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+    
+    .detail-table tr:first-child td:nth-child(2) {
+        width: auto;
+    }
+    .detail-table tr:first-child td:last-child {
+        width: 200px;
+    }
+    .detail-table .nested-table {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        margin: 0;
+    }
+    .detail-table .nested-table td {
+        border: none;
+        border-bottom: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 16px;
+    }
+    .detail-table .nested-table tr:last-child td {
+        border-bottom: none;
+    }
+    .detail-table .nested-table .label {
+        width: 45%;
+        border-right: 1px solid #000;
+        text-align: center;
+        letter-spacing: 3px;
+    }
+    .detail-table .nested-table .value {
+        width: 55%;
+        text-align: left;
+        padding-left: 10px;
+    }
+    .detail-table tr:nth-child(1) { height: 50px; }
+    .detail-table tr:nth-child(2) { height: 100px; }
+    .detail-table tr:nth-child(3) { height: 160px; }
+    .detail-table tr:nth-child(4) { height: 80px; }
+    .detail-table tr:nth-child(5) { height: 80px; }
+    .detail-table tr:nth-child(6) { height: 180px; }
+    .detail-table tr:nth-child(7) { height: 100px; }
+    .detail-table tr:nth-child(8) { height: 80px; }
+
+    .process-page-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        width: 100%;
+    }
+
+    .process-table-main {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        border: 2px solid #000;
+        table-layout: fixed;
+    }
+
+    .process-table-main thead th {
+        height: 45px;
+        background-color: #fff;
+        font-weight: normal;
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+        font-size: 18px;
+        box-sizing: border-box;
+    }
+
+    .process-table-main thead tr:first-child th {
+        font-size: 18px;
+        letter-spacing: 2px;
+    }
+
+    .process-table-main thead tr:last-child th:nth-child(1) {
+        width: 33.33%;
+    }
+    
+    .process-table-main thead tr:last-child th:nth-child(2) {
+        width: 33.34%;
+    }
+    
+    .process-table-main thead tr:last-child th:nth-child(3) {
+        width: 33.33%;
+    }
+
+    .process-table-main tbody tr {
+        height: 100%;
+    }
+
+    .process-table-main tbody td {
+        border: 1px solid #000;
+        padding: 10px;
+        vertical-align: top;
+        text-align: left;
+        font-size: 18px;
+        line-height: 1.8;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    .process-table-main tbody td:nth-child(1) {
+        width: 33.33%;
+    }
+    
+    .process-table-main tbody td:nth-child(2) {
+        width: 33.34%;
+    }
+    
+    .process-table-main tbody td:nth-child(3) {
+        width: 33.33%;
+    }
+
+    .process-table-footer {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #000;
+        border-top: none;
+        margin-top: -2px;
+        table-layout: fixed;
+    }
+
+    .process-table-footer td {
+        border: 1px solid #000;
+        padding: 10px;
+        text-align: left;
+        font-size: 18px;
+        vertical-align: top;
+        line-height: 1.8;
+        box-sizing: border-box;
+        white-space: pre-wrap;
+    }
+
+    .process-table-footer .row-header {
+        width: 120px;
+        text-align: center;
+        letter-spacing: 5px;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+    
+    .process-table-footer .footer-content {
+        height: 120px;
+        text-align: left;
+    }
+
+    .page-footer {
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 16px;
+        color: #000;
+    }
+
+    .cover-page ~ .page-footer {
+        display: none;
+    }
+
+    @media print {
+        body {
+            padding: 0;
+            background-color: white;
         }
-        .container { 
-            max-width: 900px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 40px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        .page {
+            border: none;
+            margin: 0;
+            page-break-after: always;
+            box-shadow: none;
         }
-        .title { 
-            text-align: center; 
-            font-size: 24px; 
-            font-weight: bold; 
-            margin-bottom: 30px; 
-            color: #2c3e50; 
-            border-bottom: 2px solid #3498db; 
-            padding-bottom: 15px; 
+        .page:last-child {
+            page-break-after: auto;
         }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin: 20px 0; 
-            background: white; 
-        }
-        th, td { 
-            border: 1px solid #ddd; 
-            padding: 15px; 
-            text-align: left; 
-            vertical-align: top; 
-        }
-        th { 
-            background-color: #f8f9fa; 
-            font-weight: bold; 
-            color: #495057; 
-            width: 20%; 
-        }
-        td { 
-            color: #212529; 
-            min-height: 60px; 
-        }
-        .content-cell { 
-            white-space: pre-line; 
-            line-height: 1.8; 
-        }
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin: 20px 0 10px 0;
-            border-left: 4px solid #3498db;
-            padding-left: 10px;
-        }
-        .footer { 
-            text-align: right; 
-            margin-top: 30px; 
-            font-size: 14px; 
-            color: #6c757d; 
-            font-style: italic; 
-        }
-        .empty-content {
-            color: #999;
-            font-style: italic;
-        }
-        
-        /* 打印专用样式 */
-        @media print {
-            body {
-                background-color: white;
-                padding: 0;
-            }
-            .container {
-                max-width: 100%;
-                padding: 20px;
-                box-shadow: none;
-                border-radius: 0;
-            }
-            .title {
-                page-break-after: avoid;
-            }
-            .section-title {
-                page-break-after: avoid;
-            }
-            table {
-                page-break-inside: avoid;
-            }
-            tr {
-                page-break-inside: avoid;
-                page-break-after: auto;
-            }
-            .footer {
-                page-break-before: avoid;
-            }
-            @page {
-                margin: 1.5cm;
-                size: A4;
-            }
-        }
-    </style>
+    }
+
+    .detail-table td:not(.row-header) {
+        text-align: left;
+        line-height: 1.8;
+    }
+
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    table {
+        border-spacing: 0;
+    }
+
+    .detail-table td[colspan] {
+        min-height: 30px;
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">厦门市第九中学教案</div>
-        
-        <table>
-            <tr>
-                <th>学 科</th>
-                <td>${data.subject || '<span class="empty-content">未填写</span>'}</td>
-                <th>年 级</th>
-                <td>${data.grade || '<span class="empty-content">未填写</span>'}</td>
-            </tr>
-            <tr>
-                <th>班 级</th>
-                <td>${data.class || '<span class="empty-content">未填写</span>'}</td>
-                <th>学年度</th>
-                <td>${data.academicYear || '<span class="empty-content">未填写</span>'}</td>
-            </tr>
-            <tr>
-                <th>教 师</th>
-                <td>${data.teacher || '<span class="empty-content">未填写</span>'}</td>
-                <th>备课时间</th>
-                <td>${data.prepareTime || currentDate}</td>
-            </tr>
-            <tr>
-                <th>课 题</th>
-                <td colspan="3">${data.lessonTopic || '<span class="empty-content">未填写</span>'}</td>
-            </tr>
-            <tr>
-                <th>课时数</th>
-                <td colspan="3">${data.classHours || '<span class="empty-content">未填写</span>'}</td>
-            </tr>
-        </table>
 
-        <div class="section-title">课标要求</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.curriculumRequire || '<span class="empty-content">未填写课标要求</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">素养目标</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.literacyTarget || '<span class="empty-content">未填写素养目标</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">教学重点</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.keyPoints || '<span class="empty-content">未填写教学重点</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">教学难点</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.difficultPoints || '<span class="empty-content">未填写教学难点</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">学情分析</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.studentAnalysis || '<span class="empty-content">未填写学情分析</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">教学策略</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.teachingStrategy || '<span class="empty-content">未填写教学策略</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">教学资源</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.teachingResources || '<span class="empty-content">未填写教学资源</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">教学过程</div>
-        <table>
-            ${teachingProcessHTML || '<tr><td colspan="2" style="text-align: center; color: #999; font-style: italic;">未填写教学过程</td></tr>'}
-        </table>
-
-        <div class="section-title">板书设计</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.blackboardDesign || '<span class="empty-content">未填写板书设计</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="section-title">教学反思</div>
-        <table>
-            <tr>
-                <td colspan="4" class="content-cell">${data.reflection || '<span class="empty-content">未填写教学反思</span>'}</td>
-            </tr>
-        </table>
-
-        <div class="footer">厦门市第九中学教案本 | 导出时间：${currentDate}</div>
+<div class="page">
+    <div class="cover-page">
+        <div>
+            <div class="cover-title">厦门市第九中学</div>
+            <div class="cover-subtitle">教 案 本</div>
+        </div>
+        <div class="info-section">
+            <div class="info-line"><span>学 科</span>: <div class="line-content">${escapeHtml(data.subject || '')}</div></div>
+            <div class="info-line"><span>年 级</span>: <div class="line-content">${escapeHtml(data.grade || '')}</div></div>
+            <div class="info-line"><span>班 级</span>: <div class="line-content">${escapeHtml(data.class || '')}</div></div>
+            <div class="info-line"><span>学年度</span>: <div class="line-content">${escapeHtml(data.academicYear || '')}</div></div>
+            <div class="info-line"><span>教 师</span>: <div class="line-content">${escapeHtml(data.teacher || '')}</div></div>
+        </div>
+        <div class="date-section">
+            ${year}年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${month}月
+        </div>
     </div>
+</div>
+
+<div class="page toc-page">
+    <h1>教案目录</h1>
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th class="col-seq">序号</th>
+                <th class="col-title">课 题</th>
+                <th class="col-page">页码</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>${escapeHtml(data.lessonTopic || '')}</td><td>3</td></tr>
+            <tr><td>2</td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td></tr>
+            <tr><td>7</td><td></td><td></td></tr>
+            <tr><td>8</td><td></td><td></td></tr>
+            <tr><td>9</td><td></td><td></td></tr>
+            <tr><td>10</td><td></td><td></td></tr>
+            <tr><td>11</td><td></td><td></td></tr>
+            <tr><td>12</td><td></td><td></td></tr>
+            <tr><td>13</td><td></td><td></td></tr>
+            <tr><td>14</td><td></td><td></td></tr>
+            <tr><td>15</td><td></td><td></td></tr>
+        </tbody>
+    </table>
+    <div class="page-footer">第 2 页</div>
+</div>
+
+<div class="page">
+    <table class="detail-table">
+        <tbody>
+            <tr>
+                <td class="row-header">课题</td>
+                <td colspan="2">${escapeHtml(data.lessonTopic || '')}</td>
+                <td style="width: 200px;">
+                    <table class="nested-table">
+                        <tr><td class="label">备课时间</td><td class="value">${escapeHtml(data.prepareTime || '')}</td></tr>
+                        <tr><td class="label">课 时 数</td><td class="value">${escapeHtml(data.classHours || '')}</td></tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="row-header">课标要求</td>
+                <td colspan="3">${escapeHtml(data.curriculumRequire || '')}</td>
+            </tr>
+            <tr>
+                <td class="row-header">素养目标</td>
+                <td colspan="3">${escapeHtml(data.literacyTarget || '')}</td>
+            </tr>
+            <tr>
+                <td class="row-header">重点</td>
+                <td colspan="3">${escapeHtml(data.keyPoints || '')}</td>
+            </tr>
+            <tr>
+                <td class="row-header">难点</td>
+                <td colspan="3">${escapeHtml(data.difficultPoints || '')}</td>
+            </tr>
+            <tr>
+                <td class="row-header">学情分析</td>
+                <td colspan="3">${escapeHtml(data.studentAnalysis || '')}</td>
+            </tr>
+            <tr>
+                <td class="row-header">教学策略</td>
+                <td colspan="3">${escapeHtml(data.teachingStrategy || '')}</td>
+            </tr>
+            <tr>
+                <td class="row-header">教学资源</td>
+                <td colspan="3">${escapeHtml(data.teachingResources || '')}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-footer">第 3 页</div>
+</div>
+
+<div class="page">
+    <div class="process-page-container">
+        <table class="process-table-main">
+            <thead>
+                <tr>
+                    <th colspan="3">教学过程</th>
+                </tr>
+                <tr>
+                    <th>教师活动</th>
+                    <th>学生活动</th>
+                    <th>设计意图</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${teachingProcessPage1 || ''}</td>
+                    <td>${studentActivityPage1 || ''}</td>
+                    <td>${designIntentPage1 || ''}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="page-footer">第 4 页</div>
+</div>
+
+<div class="page">
+    <div class="process-page-container">
+        <table class="process-table-main">
+            <thead>
+                <tr>
+                    <th colspan="3">教学过程</th>
+                </tr>
+                <tr>
+                    <th>教师活动</th>
+                    <th>学生活动</th>
+                    <th>设计意图</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${teachingProcessPage2 || ''}</td>
+                    <td>${studentActivityPage2 || ''}</td>
+                    <td>${designIntentPage2 || ''}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="process-table-footer">
+            <tr>
+                <td class="row-header">板书设计</td>
+                <td class="footer-content">${escapeHtml(data.blackboardDesign || '')}</td>
+            </tr>
+            <tr>
+                <td class="row-header">教学反思</td>
+                <td class="footer-content">${escapeHtml(data.reflection || '')}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="page-footer">第 5 页</div>
+</div>
+
 </body>
 </html>`;
+}
+
+/**
+ * HTML转义函数,防止XSS攻击
+ */
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 /**
