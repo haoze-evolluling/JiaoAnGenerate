@@ -315,15 +315,43 @@
     </div>
   </section>
 
-  <!-- 页脚：简洁的版权信息 -->
-  <footer class="bg-gradient-to-r from-primary via-primary-light to-primary text-white py-8 relative overflow-hidden">
-    <div class="absolute inset-0 bg-white/5 backdrop-blur-sm"></div>
+  <!-- 页脚：液态玻璃效果设计 -->
+  <footer class="py-12 relative overflow-hidden footer-enhanced">
+    <!-- 背景渐变层 - 增强主题色显示 -->
+    <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary-light to-primary-dark"></div>
+    
+    <!-- 液态玻璃效果层 - 降低透明度以保持主题色 -->
+    <div class="absolute inset-0 backdrop-blur-xl bg-white/5 saturate-150"></div>
+    
+    <!-- 装饰性光晕效果 -->
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-light/30 rounded-full blur-3xl opacity-40 animate-pulse"></div>
+    <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-2xl opacity-30 animate-pulse animation-delay-1000"></div>
+    <div class="absolute bottom-1/4 left-1/4 w-48 h-48 bg-primary-dark/20 rounded-full blur-xl opacity-25 animate-pulse animation-delay-2000"></div>
+    
+    <!-- 内容层 -->
     <div class="container mx-auto px-4 text-center relative z-10">
-      <p class="text-lg font-medium">厦门市第九中学 © 2025</p>
-      <p class="mt-2 text-white/90">教案本系统 | 教育信息化</p>
-      <div class="mt-4 flex justify-center gap-6">
-        <a href="#cover" class="hover:text-white/80 transition-colors duration-300">
-          <i class="fas fa-arrow-up"></i> 返回顶部
+      <!-- 主要信息区域 - 液态玻璃卡片效果 -->
+      <div class="max-w-2xl mx-auto mb-8">
+        <div class="glass-card rounded-2xl p-8 backdrop-blur-xl bg-white/8 border border-white/20 shadow-2xl">
+          <div class="text-center space-y-4">
+            <p class="text-2xl font-bold text-white tracking-wide drop-shadow-lg" style="text-shadow: 0 2px 4px rgba(0,0,0,0.3);">@厦门九中总务处</p>
+            <div class="h-px w-32 mx-auto bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+            <p class="text-xl text-white font-medium tracking-widest drop-shadow-md" style="text-shadow: 0 2px 4px rgba(0,0,0,0.25);">勤奋自强 求实创新</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 底部版权信息 - 增强文字对比度 -->
+      <div class="text-white text-sm footer-copyright">
+        <p class="mb-2 font-semibold" style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">厦门市第九中学 © 2025</p>
+        <p class="text-white/95 font-medium" style="text-shadow: 0 1px 3px rgba(0,0,0,0.25);">教案本系统 | 教育信息化</p>
+      </div>
+      
+      <!-- 返回顶部按钮 -->
+      <div class="mt-6">
+        <a href="#cover" class="inline-flex items-center px-6 py-3 rounded-full glass-card text-white font-semibold hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-xl border border-white/30" style="text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+          <i class="fas fa-arrow-up mr-2"></i>
+          返回顶部
         </a>
       </div>
     </div>
