@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>厦门市第九中学教案本</title>
+<style>
+    body {
+        font-family: 'SimSun', '宋体', serif;
+        font-size: 16px;
+        color: #000;
+        background-color: #fff;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .page {
+        width: 794px; /* A4 width at 96dpi, approximately */
+        height: 1123px; /* A4 height at 96dpi, approximately */
+        border: 1px solid #ccc;
+        margin-bottom: 20px;
+        padding: 60px; /* Increased padding for better margins */
+        box-sizing: border-box;
+        background-color: white;
+        page-break-after: always;
+        display: flex;
+        flex-direction: column;
+        position: relative; /* For page number positioning */
+    }
+    .cover-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        flex-grow: 1; /* Make cover content fill available space */
+    }
+    .cover-title {
+        font-size: 42px; /* Adjusted font size */
+        color: #465d87;
+        letter-spacing: 5px;
+        margin-top: 80px; /* Adjusted margin */
+    }
+    .cover-subtitle {
+        font-size: 68px; /* Adjusted font size */
+        font-weight: bold;
+        color: #465d87;
+        letter-spacing: 20px;
+        margin-top: 60px; /* Adjusted margin */
+        margin-bottom: 150px; /* Adjusted margin */
+    }
+    .info-section {
+        width: 60%; /* Adjusted width */
+        margin: 0 auto;
+        text-align: left;
+    }
+    .info-line {
+        font-size: 24px;
+        color: #465d87;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+    }
+    .info-line span {
+        width: 100px;
+        display: inline-block;
+        letter-spacing: 8px;
+        text-align: justify;
+        text-align-last: justify;
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+    .info-line .line {
+        flex-grow: 1;
+        border-bottom: 1px solid #465d87;
+        margin-left: 10px;
+    }
+    .date-section {
+        font-size: 24px;
+        color: #465d87;
+        letter-spacing: 15px;
+        margin-top: auto;
+        margin-bottom: 50px;
+    }
+
+    .toc-page h1 {
+        text-align: center;
+        font-size: 36px;
+        font-weight: bold;
+        letter-spacing: 10px;
+        margin-top: 50px; /* Adjusted margin */
+        margin-bottom: 40px; /* Adjusted margin */
+    }
+
+    .content-table, .detail-table, .process-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #000;
+    }
+
+    .content-table th, .content-table td,
+    .detail-table th, .detail-table td,
+    .process-table th, .process-table td {
+        border: 1px solid #000;
+        padding: 8px; /* Slightly reduced padding */
+        text-align: center;
+        font-size: 18px;
+        box-sizing: border-box; /* Include padding in element's total width and height */
+    }
+
+    .content-table th {
+        font-weight: normal;
+        height: 45px; /* Adjusted height */
+    }
+    .content-table td {
+        height: 48px; /* Kept original height for content rows */
+    }
+    .content-table .col-seq { width: 12%; } /* Adjusted width */
+    .content-table .col-title { width: 68%; } /* Adjusted width */
+    .content-table .col-page { width: 20%; }
+
+    .detail-table {
+        table-layout: fixed;
+        margin-top: 20px;
+    }
+
+    .detail-table td {
+        vertical-align: top; /* Changed to top for better content alignment */
+        padding: 8px;
+    }
+    .detail-table .row-header {
+        font-weight: normal;
+        width: 120px; /* Adjusted width */
+        height: auto; /* Allow content to dictate height */
+        padding: 8px;
+        text-align: center;
+        letter-spacing: 5px;
+        white-space: nowrap; /* Prevent text wrapping for headers */
+    }
+    .detail-table .nested-table {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+    }
+    .detail-table .nested-table td {
+        border: none;
+        border-bottom: 1px solid #000;
+        padding: 5px;
+        text-align: left;
+    }
+    .detail-table .nested-table tr:last-child td {
+        border-bottom: none;
+    }
+    .detail-table .nested-table .label {
+        width: 40%; /* Adjusted width */
+        border-right: 1px solid #000;
+    }
+    .detail-table .nested-table .value {
+        width: 60%; /* Adjusted width */
+    }
+    /* Specific row heights to match image proportions */
+    .detail-table tr:nth-child(1) td:nth-child(2) { height: 50px; } /* Topic content cell */
+    .detail-table tr:nth-child(2) td:nth-child(2) { height: 100px; } /* Course requirements */
+    .detail-table tr:nth-child(3) td:nth-child(2) { height: 160px; } /* Literacy goals */
+    .detail-table tr:nth-child(4) td:nth-child(2) { height: 80px; } /* Key points */
+    .detail-table tr:nth-child(5) td:nth-child(2) { height: 80px; } /* Difficulties */
+    .detail-table tr:nth-child(6) td:nth-child(2) { height: 180px; } /* Student analysis */
+    .detail-table tr:nth-child(7) td:nth-child(2) { height: 100px; } /* Teaching strategies */
+    .detail-table tr:nth-child(8) td:nth-child(2) { height: 80px; } /* Teaching resources */
+
+    .process-page-container {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* Allow content to fill the page */
+    }
+
+    .process-table-main {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .process-table-main .process-header th {
+        height: 45px; /* Consistent header height */
+    }
+
+    .process-table-main .process-body td {
+        flex-grow: 1; /* Allow body cells to expand */
+        vertical-align: top;
+        height: 600px; /* Explicit height for the main content area */
+    }
+
+    .process-table-footer {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #000;
+        border-top: none; /* Remove top border as it connects to the main table */
+        margin-top: -2px; /* Overlap to combine borders */
+    }
+    .process-table-footer td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+        font-size: 18px;
+        vertical-align: top;
+    }
+
+    .process-table-footer .row-header {
+        width: 120px; /* Consistent header width */
+        text-align: center;
+        letter-spacing: 5px;
+        white-space: nowrap;
+    }
+    .process-table-footer .footer-content {
+        height: 120px; /* Adjusted height */
+    }
+
+
+    .page-footer {
+        position: absolute;
+        bottom: 30px; /* Position at the bottom of the page */
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <div class="cover-page">
+        <div>
+            <div class="cover-title">厦门市第九中学</div>
+            <div class="cover-subtitle">教 案 本</div>
+        </div>
+        <div class="info-section">
+            <div class="info-line"><span>学 科</span>: <div class="line"></div></div>
+            <div class="info-line"><span>年 级</span>: <div class="line"></div></div>
+            <div class="info-line"><span>班 级</span>: <div class="line"></div></div>
+            <div class="info-line"><span>学年度</span>: <div class="line"></div></div>
+            <div class="info-line"><span>教 师</span>: <div class="line"></div></div>
+        </div>
+        <div class="date-section">
+            年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月
+        </div>
+    </div>
+</div>
+
+<div class="page toc-page">
+    <h1>教案目录</h1>
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th class="col-seq">序号</th>
+                <th class="col-title">课 题</th>
+                <th class="col-page">页码</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td></td><td></td></tr>
+            <tr><td>2</td><td></td><td></td></tr>
+            <tr><td>3</td><td></td><td></td></tr>
+            <tr><td>4</td><td></td><td></td></tr>
+            <tr><td>5</td><td></td><td></td></tr>
+            <tr><td>6</td><td></td><td></td></tr>
+            <tr><td>7</td><td></td><td></td></tr>
+            <tr><td>8</td><td></td><td></td></tr>
+            <tr><td>9</td><td></td><td></td></tr>
+            <tr><td>10</td><td></td><td></td></tr>
+            <tr><td>11</td><td></td><td></td></tr>
+            <tr><td>12</td><td></td><td></td></tr>
+            <tr><td>13</td><td></td><td></td></tr>
+            <tr><td>14</td><td></td><td></td></tr>
+            <tr><td>15</td><td></td><td></td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="page">
+    <table class="detail-table">
+        <tbody>
+            <tr>
+                <td class="row-header">课题</td>
+                <td colspan="3" style="width: calc(100% - 120px - 200px);"></td>
+                <td style="width: 200px;">
+                    <table class="nested-table">
+                        <tr><td class="label">备课时间</td><td class="value"></td></tr>
+                        <tr><td class="label">课 时 数</td><td class="value"></td></tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="row-header">课标要求</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="row-header">素养目标</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="row-header">重点</td>
+                <td colspan="4"></td>
+            </tr>
+             <tr>
+                <td class="row-header">难点</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="row-header">学情分析</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="row-header">教学策略</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td class="row-header">教学资源</td>
+                <td colspan="4"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-footer">第 页</div>
+</div>
+
+<div class="page">
+    <div class="process-page-container">
+        <table class="process-table process-table-main">
+            <thead class="process-header">
+                <tr>
+                    <th colspan="3">教学过程</th>
+                </tr>
+                <tr>
+                    <th style="width: 25%;">教师活动</th>
+                    <th style="width: 40%;">学生活动</th>
+                    <th style="width: 35%;">设计意图</th>
+                </tr>
+            </thead>
+            <tbody class="process-body">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="page-footer">第 页</div>
+</div>
+
+<div class="page">
+    <div class="process-page-container">
+        <table class="process-table process-table-main">
+             <thead class="process-header">
+                <tr>
+                    <th colspan="3">教学过程</th>
+                </tr>
+                <tr>
+                    <th style="width: 25%;">教师活动</th>
+                    <th style="width: 40%;">学生活动</th>
+                    <th style="width: 35%;">设计意图</th>
+                </tr>
+            </thead>
+            <tbody class="process-body">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="process-table-footer">
+             <tr>
+                <td class="row-header" style="height: 120px;">板书设计</td>
+                <td class="footer-content"></td>
+            </tr>
+            <tr>
+                <td class="row-header" style="height: 120px;">教学反思</td>
+                <td class="footer-content"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="page-footer">第 页</div>
+</div>
+
+
+</body>
+</html>
