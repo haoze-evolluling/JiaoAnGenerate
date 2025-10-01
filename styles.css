@@ -340,7 +340,7 @@ section {
   padding: 14px 32px;
   border: none;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(74, 144, 226, 0.3);
@@ -393,7 +393,7 @@ section {
   padding: 14px 32px;
   border: none;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(123, 179, 240, 0.3);
@@ -429,15 +429,15 @@ section {
 
 /* ===== 导出HTML按钮样式 ===== */
 .export-btn {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  background: linear-gradient(135deg, #5A9BD4 0%, #4A90E2 100%);
   color: white;
   padding: 14px 32px;
   border: none;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 8px 24px rgba(90, 155, 212, 0.3);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -460,8 +460,8 @@ section {
 
 .export-btn:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
-  background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+  box-shadow: 0 12px 32px rgba(90, 155, 212, 0.4);
+  background: linear-gradient(135deg, #4A90E2 0%, #5A9BD4 100%);
 }
 
 .export-btn:active {
