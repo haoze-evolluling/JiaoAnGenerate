@@ -187,6 +187,313 @@ function printLessonPlan() {
 }
 
 /**
+ * 导出教案为HTML格式
+ * 参考旧版本模板格式，生成完整的HTML文档
+ */
+function exportLessonPlanToHTML() {
+  try {
+    // 获取所有教案数据
+    const lessonData = collectLessonData();
+    
+    // 生成HTML内容
+    const htmlContent = generateHTMLTemplate(lessonData);
+    
+    // 创建Blob并下载
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    
+    // 生成文件名
+    const subject = lessonData.subject || '学科';
+    const grade = lessonData.grade || '年级';
+    const lessonTopic = lessonData.lessonTopic || '课题';
+    const date = new Date().toLocaleDateString('zh-CN').replace(/\//g, '-');
+    link.download = `厦门九中教案_${subject}_${grade}_${lessonTopic}_${date}.html`;
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert('教案导出成功！');
+  } catch (error) {
+    console.error('HTML导出失败:', error);
+    alert('教案导出失败，请重试。错误信息：' + error.message);
+  }
+}
+
+/**
+ * 收集教案数据
+ */
+function collectLessonData() {
+  const data = {};
+  
+  // 封面信息
+  data.subject = document.getElementById('subject')?.value?.trim() || '';
+  data.grade = document.getElementById('grade')?.value?.trim() || '';
+  data.class = document.getElementById('class')?.value?.trim() || '';
+  data.academicYear = document.getElementById('academic-year')?.value?.trim() || '';
+  data.teacher = document.getElementById('teacher')?.value?.trim() || '';
+  
+  // 备课信息
+  data.lessonTopic = document.getElementById('lesson-topic')?.value?.trim() || '';
+  data.prepareTime = document.getElementById('prepare-time')?.value?.trim() || '';
+  data.classHours = document.getElementById('class-hours')?.value?.trim() || '';
+  data.curriculumRequire = document.getElementById('curriculum-require')?.value?.trim() || '';
+  data.literacyTarget = document.getElementById('literacy-target')?.value?.trim() || '';
+  data.keyPoints = document.getElementById('key-points')?.value?.trim() || '';
+  data.difficultPoints = document.getElementById('difficult-points')?.value?.trim() || '';
+  data.studentAnalysis = document.getElementById('student-analysis')?.value?.trim() || '';
+  data.teachingStrategy = document.getElementById('teaching-strategy')?.value?.trim() || '';
+  data.teachingResources = document.getElementById('teaching-resources')?.value?.trim() || '';
+  
+  // 教学过程
+  data.teachingProcess = [];
+  const processTable = document.querySelector('#lesson table tbody');
+  if (processTable) {
+    const rows = processTable.querySelectorAll('tr');
+    rows.forEach(row => {
+      const textareas = row.querySelectorAll('textarea');
+      if (textareas.length >= 3) {
+        const teacherActivity = textareas[0].value.trim();
+        const studentActivity = textareas[1].value.trim();
+        const designIntent = textareas[2].value.trim();
+        
+        if (teacherActivity || studentActivity || designIntent) {
+          data.teachingProcess.push({
+            teacherActivity,
+            studentActivity,
+            designIntent
+          });
+        }
+      }
+    });
+  }
+  
+  // 板书设计和教学反思
+  const lessonTextareas = document.querySelectorAll('#lesson .grid textarea');
+  data.blackboardDesign = lessonTextareas[0]?.value?.trim() || '';
+  data.reflection = lessonTextareas[1]?.value?.trim() || '';
+  
+  return data;
+}
+
+/**
+ * 生成HTML模板
+ * 参考旧版本的模板格式
+ */
+function generateHTMLTemplate(data) {
+  const currentDate = new Date().toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  
+  // 生成教学过程HTML
+  let teachingProcessHTML = '';
+  if (data.teachingProcess && data.teachingProcess.length > 0) {
+    data.teachingProcess.forEach((process, index) => {
+      teachingProcessHTML += `
+            <tr>
+              <td style="border: 1px solid #ddd; padding: 15px; text-align: left; vertical-align: top; background-color: #f8f9fa; font-weight: bold; color: #495057; width: 20%;">环节 ${index + 1}</td>
+              <td style="border: 1px solid #ddd; padding: 15px; text-align: left; vertical-align: top; color: #212529;">
+                <strong>教师活动：</strong><br>${process.teacherActivity || ''}<br><br>
+                <strong>学生活动：</strong><br>${process.studentActivity || ''}<br><br>
+                <strong>设计意图：</strong><br>${process.designIntent || ''}
+              </td>
+            </tr>`;
+    });
+  }
+  
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>厦门市第九中学教案 - ${data.lessonTopic || '教案'}</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background-color: #f5f5f5; 
+            line-height: 1.6; 
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 40px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        .title { 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: bold; 
+            margin-bottom: 30px; 
+            color: #2c3e50; 
+            border-bottom: 2px solid #3498db; 
+            padding-bottom: 15px; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 20px 0; 
+            background: white; 
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            text-align: left; 
+            vertical-align: top; 
+        }
+        th { 
+            background-color: #f8f9fa; 
+            font-weight: bold; 
+            color: #495057; 
+            width: 20%; 
+        }
+        td { 
+            color: #212529; 
+            min-height: 60px; 
+        }
+        .content-cell { 
+            white-space: pre-line; 
+            line-height: 1.8; 
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0 10px 0;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        .footer { 
+            text-align: right; 
+            margin-top: 30px; 
+            font-size: 14px; 
+            color: #6c757d; 
+            font-style: italic; 
+        }
+        .empty-content {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">厦门市第九中学教案</div>
+        
+        <table>
+            <tr>
+                <th>学 科</th>
+                <td>${data.subject || '<span class="empty-content">未填写</span>'}</td>
+                <th>年 级</th>
+                <td>${data.grade || '<span class="empty-content">未填写</span>'}</td>
+            </tr>
+            <tr>
+                <th>班 级</th>
+                <td>${data.class || '<span class="empty-content">未填写</span>'}</td>
+                <th>学年度</th>
+                <td>${data.academicYear || '<span class="empty-content">未填写</span>'}</td>
+            </tr>
+            <tr>
+                <th>教 师</th>
+                <td>${data.teacher || '<span class="empty-content">未填写</span>'}</td>
+                <th>备课时间</th>
+                <td>${data.prepareTime || currentDate}</td>
+            </tr>
+            <tr>
+                <th>课 题</th>
+                <td colspan="3">${data.lessonTopic || '<span class="empty-content">未填写</span>'}</td>
+            </tr>
+            <tr>
+                <th>课时数</th>
+                <td colspan="3">${data.classHours || '<span class="empty-content">未填写</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">课标要求</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.curriculumRequire || '<span class="empty-content">未填写课标要求</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">素养目标</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.literacyTarget || '<span class="empty-content">未填写素养目标</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">教学重点</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.keyPoints || '<span class="empty-content">未填写教学重点</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">教学难点</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.difficultPoints || '<span class="empty-content">未填写教学难点</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">学情分析</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.studentAnalysis || '<span class="empty-content">未填写学情分析</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">教学策略</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.teachingStrategy || '<span class="empty-content">未填写教学策略</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">教学资源</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.teachingResources || '<span class="empty-content">未填写教学资源</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">教学过程</div>
+        <table>
+            ${teachingProcessHTML || '<tr><td colspan="2" style="text-align: center; color: #999; font-style: italic;">未填写教学过程</td></tr>'}
+        </table>
+
+        <div class="section-title">板书设计</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.blackboardDesign || '<span class="empty-content">未填写板书设计</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">教学反思</div>
+        <table>
+            <tr>
+                <td colspan="4" class="content-cell">${data.reflection || '<span class="empty-content">未填写教学反思</span>'}</td>
+            </tr>
+        </table>
+
+        <div class="footer">厦门市第九中学教案本 | 导出时间：${currentDate}</div>
+    </div>
+</body>
+</html>`;
+}
+
+/**
  * 初始化AI智能生成功能
  */
 function initAIGeneration() {
@@ -203,6 +510,12 @@ function initAIGeneration() {
   // 绑定生成按钮事件
   if (generateBtn) {
     generateBtn.addEventListener('click', () => generateLessonPlanWithAI());
+  }
+  
+  // 绑定导出HTML按钮事件
+  const exportHtmlBtn = document.getElementById('export-html-btn');
+  if (exportHtmlBtn) {
+    exportHtmlBtn.addEventListener('click', () => exportLessonPlanToHTML());
   }
   
   // 绑定清空按钮事件
