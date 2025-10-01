@@ -746,13 +746,13 @@ function generateHTMLTemplate(data) {
     .process-page-container {
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
         width: 100%;
+        height: 100%;
     }
 
     .process-table-main {
         width: 100%;
-        height: 100%;
+        flex: 0 0 auto;
         border-collapse: collapse;
         border: 2px solid #000;
         table-layout: fixed;
@@ -787,22 +787,22 @@ function generateHTMLTemplate(data) {
     }
 
     .process-table-main tbody tr {
-        height: 100%;
+        height: auto;
     }
 
     .process-table-main tbody td {
         border: 1px solid #000;
-        padding: 12px;
+        padding: 10px;
         vertical-align: top;
         text-align: left;
-        font-size: 16px;
-        line-height: 1.6;
+        font-size: 13px;
+        line-height: 1.5;
         box-sizing: border-box;
         word-wrap: break-word;
         overflow-wrap: break-word;
         white-space: pre-wrap;
         text-indent: 0;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.3px;
     }
 
     .process-table-main tbody td:nth-child(1) {
@@ -824,17 +824,20 @@ function generateHTMLTemplate(data) {
         border-top: none;
         margin-top: -2px;
         table-layout: fixed;
+        flex: 0 0 auto;
     }
 
     .process-table-footer td {
         border: 1px solid #000;
-        padding: 10px;
+        padding: 8px;
         text-align: left;
-        font-size: 18px;
+        font-size: 13px;
         vertical-align: top;
-        line-height: 1.8;
+        line-height: 1.5;
         box-sizing: border-box;
         white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .process-table-footer .row-header {
@@ -846,7 +849,8 @@ function generateHTMLTemplate(data) {
     }
     
     .process-table-footer .footer-content {
-        height: 120px;
+        height: auto;
+        min-height: 80px;
         text-align: left;
     }
 
@@ -990,61 +994,57 @@ function generateHTMLTemplate(data) {
 </div>
 
 <div class="page">
-    <div class="process-page-container">
-        <table class="process-table-main">
-            <thead>
-                <tr>
-                    <th colspan="3">教学过程</th>
-                </tr>
-                <tr>
-                    <th>教师活动</th>
-                    <th>学生活动</th>
-                    <th>设计意图</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>${teachingProcessPage1 || ''}</td>
-                    <td>${studentActivityPage1 || ''}</td>
-                    <td>${designIntentPage1 || ''}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <table class="process-table-main" style="height: auto; max-height: 100%;">
+        <thead>
+            <tr>
+                <th colspan="3">教学过程</th>
+            </tr>
+            <tr>
+                <th>教师活动</th>
+                <th>学生活动</th>
+                <th>设计意图</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${teachingProcessPage1 || ''}</td>
+                <td>${studentActivityPage1 || ''}</td>
+                <td>${designIntentPage1 || ''}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <div class="page">
-    <div class="process-page-container">
-        <table class="process-table-main">
-            <thead>
-                <tr>
-                    <th colspan="3">教学过程</th>
-                </tr>
-                <tr>
-                    <th>教师活动</th>
-                    <th>学生活动</th>
-                    <th>设计意图</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>${teachingProcessPage2 || ''}</td>
-                    <td>${studentActivityPage2 || ''}</td>
-                    <td>${designIntentPage2 || ''}</td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="process-table-footer">
+    <table class="process-table-main" style="height: auto; max-height: 55%;">
+        <thead>
             <tr>
-                <td class="row-header">板书设计</td>
-                <td class="footer-content">${escapeHtml(data.blackboardDesign || '')}</td>
+                <th colspan="3">教学过程（续）</th>
             </tr>
             <tr>
-                <td class="row-header">教学反思</td>
-                <td class="footer-content">${escapeHtml(data.reflection || '')}</td>
+                <th>教师活动</th>
+                <th>学生活动</th>
+                <th>设计意图</th>
             </tr>
-        </table>
-    </div>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${teachingProcessPage2 || ''}</td>
+                <td>${studentActivityPage2 || ''}</td>
+                <td>${designIntentPage2 || ''}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="process-table-footer" style="margin-top: 20px;">
+        <tr>
+            <td class="row-header">板书设计</td>
+            <td class="footer-content">${escapeHtml(data.blackboardDesign || '')}</td>
+        </tr>
+        <tr>
+            <td class="row-header">教学反思</td>
+            <td class="footer-content">${escapeHtml(data.reflection || '')}</td>
+        </tr>
+    </table>
 </div>
 
 </body>
