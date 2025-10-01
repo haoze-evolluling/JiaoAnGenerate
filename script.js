@@ -272,9 +272,8 @@ function collectLessonData() {
   }
   
   // 板书设计和教学反思
-  const lessonTextareas = document.querySelectorAll('#lesson .grid textarea');
-  data.blackboardDesign = lessonTextareas[0]?.value?.trim() || '';
-  data.reflection = lessonTextareas[1]?.value?.trim() || '';
+  data.blackboardDesign = document.getElementById('blackboard-design')?.value?.trim() || '';
+  data.reflection = document.getElementById('teaching-reflection')?.value?.trim() || '';
   
   return data;
 }
@@ -776,12 +775,20 @@ function fillGeneratedContent(content) {
   }
   
   // 填充板书设计和教学反思
-  const blackboardTextareas = document.querySelectorAll('#lesson .grid textarea');
-  if (blackboardTextareas[0] && content.blackboardDesign) {
-    blackboardTextareas[0].value = content.blackboardDesign;
+  if (content.blackboardDesign) {
+    const blackboardEl = document.getElementById('blackboard-design');
+    if (blackboardEl) {
+      blackboardEl.value = content.blackboardDesign;
+      localStorage.setItem('lessonPlan_blackboard-design', content.blackboardDesign);
+    }
   }
-  if (blackboardTextareas[1] && content.reflection) {
-    blackboardTextareas[1].value = content.reflection;
+  
+  if (content.reflection) {
+    const reflectionEl = document.getElementById('teaching-reflection');
+    if (reflectionEl) {
+      reflectionEl.value = content.reflection;
+      localStorage.setItem('lessonPlan_teaching-reflection', content.reflection);
+    }
   }
 }
 
