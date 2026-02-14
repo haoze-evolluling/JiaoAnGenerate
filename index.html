@@ -4,16 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>厦门市第九中学教案本</title>
-  <!-- 引入Tailwind CSS -->
   <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-  <!-- 引入Font Awesome图标 -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-  <!-- 引入自定义样式文件 -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-secondary">
-  <!-- 导航栏：固定顶部，方便跳转 -->
-  <nav class="bg-primary text-white shadow-md sticky top-0 z-10">
+<body class="bg-primary">
+  <!-- 导航栏 -->
+  <nav class="text-white shadow-md sticky top-0 z-10">
     <div class="container mx-auto px-4 py-3 flex justify-between items-center">
       <h1 class="text-xl font-bold">厦门市第九中学</h1>
       <div class="flex space-x-4">
@@ -24,11 +21,17 @@
     </div>
   </nav>
 
-  <!-- 封面区域：展示学校和教案本信息，可填写学科、年级等 -->
-  <section id="cover" class="cover text-white py-16">
+  <!-- 封面区域 -->
+  <section id="cover" class="cover py-16">
     <div class="container mx-auto px-4 text-center">
-      <h2 class="text-4xl font-bold mb-8" style="animation: fadeIn 0.8s ease forwards;">厦门市第九中学</h2>
-      <h3 class="text-3xl font-bold mb-12" style="animation: fadeIn 1s ease forwards;">教案本</h3>
+      <!-- 杂志风格标题 -->
+      <div class="mb-8" style="animation: fadeIn 0.8s ease forwards;">
+        <p class="magazine-subtitle text-sm mb-2">JIAO AN BEN</p>
+        <h2 class="magazine-title text-5xl mb-3">厦门市第九中学</h2>
+        <div class="w-24 h-1 mx-auto mb-4" style="background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-gold) 100%);"></div>
+        <h3 class="text-2xl font-semibold" style="color: var(--color-accent); letter-spacing: 0.1em;">教案本</h3>
+      </div>
+      
       <div class="max-w-2xl mx-auto cover-glass rounded-2xl p-8">
         <div class="form-group">
           <div class="grid grid-cols-5 items-center">
@@ -71,7 +74,6 @@
           </div>
         </div>
 
-
         <!-- AI智能生成区域 -->
         <div class="mt-8" style="animation: fadeIn 1.4s ease forwards;">
           <div class="form-group">
@@ -105,14 +107,14 @@
     </div>
   </section>
 
-  <!-- 教案详情区域：完整的教案编写模块 -->
-  <section id="lesson" class="py-16 bg-gradient-to-br from-gray-50 to-white">
+  <!-- 教案详情区域 -->
+  <section id="lesson" class="py-16" style="background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);">
     <div class="container mx-auto px-4">
-      <h2 class="section-title text-2xl font-bold text-primary mb-6 pb-3">教案详情</h2>
+      <h2 class="section-title text-2xl font-bold mb-6 pb-3">教案详情</h2>
       <div class="glass-card rounded-2xl p-8">
         <!-- 备课基础信息 -->
         <div class="mb-8">
-          <h3 class="text-xl font-semibold text-primary mb-6">备课信息</h3>
+          <h3 class="text-xl font-semibold mb-6" style="color: var(--color-primary);">备课信息</h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="form-group">
               <div class="flex items-center">
@@ -197,10 +199,10 @@
           </div>
         </div>
 
-        <!-- 教学过程（教师/学生活动+设计意图） -->
+        <!-- 教学过程 -->
         <div class="mb-8">
-          <h3 class="text-xl font-semibold text-primary mb-6">教学过程</h3>
-          <div class="overflow-x-auto bg-white/50 rounded-xl p-4 backdrop-blur-sm">
+          <h3 class="text-xl font-semibold mb-6" style="color: var(--color-primary);">教学过程</h3>
+          <div class="overflow-x-auto rounded-xl p-4" style="background: var(--color-bg-warm);">
             <table>
               <thead>
                 <tr>
@@ -232,12 +234,12 @@
 
         <!-- 板书设计 + 教学反思 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-white/50 rounded-xl p-6 backdrop-blur-sm hover:bg-white/70 transition-all duration-300">
-            <h3 class="text-xl font-semibold text-primary mb-4">板书设计</h3>
+          <div class="rounded-xl p-6 transition-all duration-300" style="background: var(--color-bg-warm);">
+            <h3 class="text-xl font-semibold mb-4" style="color: var(--color-primary);">板书设计</h3>
             <textarea id="blackboard-design" class="w-full h-40" placeholder="输入板书设计"></textarea>
           </div>
-          <div class="bg-white/50 rounded-xl p-6 backdrop-blur-sm hover:bg-white/70 transition-all duration-300">
-            <h3 class="text-xl font-semibold text-primary mb-4">教学反思</h3>
+          <div class="rounded-xl p-6 transition-all duration-300" style="background: var(--color-bg-warm);">
+            <h3 class="text-xl font-semibold mb-4" style="color: var(--color-primary);">教学反思</h3>
             <textarea id="teaching-reflection" class="w-full h-40" placeholder="输入教学反思"></textarea>
           </div>
         </div>
@@ -245,10 +247,10 @@
     </div>
   </section>
 
-  <!-- 目录区域：表格形式管理课题与页码 -->
-  <section id="directory" class="py-16 bg-gradient-to-br from-white to-gray-50">
+  <!-- 目录区域 -->
+  <section id="directory" class="py-16" style="background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);">
     <div class="container mx-auto px-4">
-      <h2 class="section-title text-2xl font-bold text-primary mb-6 pb-3">教案目录</h2>
+      <h2 class="section-title text-2xl font-bold mb-6 pb-3">教案目录</h2>
       <div class="overflow-x-auto glass-card rounded-2xl p-6">
         <table>
           <thead>
@@ -315,41 +317,41 @@
     </div>
   </section>
 
-  <!-- 页脚：液态玻璃效果设计 -->
+  <!-- 页脚 -->
   <footer class="py-12 relative overflow-hidden footer-enhanced">
-    <!-- 背景渐变层 - 增强主题色显示 -->
-    <div class="absolute inset-0 bg-gradient-to-br from-primary via-primary-light to-primary-dark"></div>
+    <!-- 背景渐变层 -->
+    <div class="absolute inset-0" style="background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);"></div>
     
-    <!-- 液态玻璃效果层 - 降低透明度以保持主题色 -->
-    <div class="absolute inset-0 backdrop-blur-xl bg-white/5 saturate-150"></div>
+    <!-- 液态玻璃效果层 -->
+    <div class="absolute inset-0 backdrop-blur-xl" style="background: rgba(255,255,255,0.05);"></div>
     
     <!-- 装饰性光晕效果 -->
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-light/30 rounded-full blur-3xl opacity-40 animate-pulse"></div>
-    <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-2xl opacity-30 animate-pulse animation-delay-1000"></div>
-    <div class="absolute bottom-1/4 left-1/4 w-48 h-48 bg-primary-dark/20 rounded-full blur-xl opacity-25 animate-pulse animation-delay-2000"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-40 animate-pulse" style="background: rgba(43, 108, 176, 0.3);"></div>
+    <div class="absolute top-1/4 right-1/4 w-64 h-64 rounded-full blur-2xl opacity-30 animate-pulse animation-delay-1000" style="background: rgba(255,255,255,0.1);"></div>
+    <div class="absolute bottom-1/4 left-1/4 w-48 h-48 rounded-full blur-xl opacity-25 animate-pulse animation-delay-2000" style="background: rgba(15, 41, 66, 0.2);"></div>
     
     <!-- 内容层 -->
     <div class="container mx-auto px-4 text-center relative z-10">
-      <!-- 主要信息区域 - 液态玻璃卡片效果 -->
+      <!-- 主要信息区域 -->
       <div class="max-w-2xl mx-auto mb-8">
-        <div class="glass-card rounded-2xl p-8 backdrop-blur-xl bg-white/8 border border-white/20 shadow-2xl">
+        <div class="glass-card rounded-2xl p-8" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
           <div class="text-center space-y-4">
-            <p class="text-2xl font-bold text-white tracking-wide drop-shadow-lg" style="text-shadow: 0 2px 4px rgba(0,0,0,0.3);">@厦门九中总务处</p>
-            <div class="h-px w-32 mx-auto bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
-            <p class="text-xl text-white font-medium tracking-widest drop-shadow-md" style="text-shadow: 0 2px 4px rgba(0,0,0,0.25);">勤奋自强 求实创新</p>
+            <p class="text-2xl font-bold text-white tracking-wide drop-shadow-lg">@厦门九中总务处</p>
+            <div class="h-px w-32 mx-auto" style="background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);"></div>
+            <p class="text-xl text-white font-medium tracking-widest drop-shadow-md">勤奋自强 求实创新</p>
           </div>
         </div>
       </div>
       
-      <!-- 底部版权信息 - 增强文字对比度 -->
+      <!-- 底部版权信息 -->
       <div class="text-white text-sm footer-copyright">
-        <p class="mb-2 font-semibold" style="text-shadow: 0 1px 3px rgba(0,0,0,0.3);">厦门市第九中学 © 2025</p>
-        <p class="text-white/95 font-medium" style="text-shadow: 0 1px 3px rgba(0,0,0,0.25);">教案本系统 | 教育信息化</p>
+        <p class="mb-2 font-semibold">厦门市第九中学 © 2025</p>
+        <p class="font-medium" style="color: rgba(255,255,255,0.95);">教案本系统 | 教育信息化</p>
       </div>
       
       <!-- 返回顶部按钮 -->
       <div class="mt-6">
-        <a href="#cover" class="inline-flex items-center px-6 py-3 rounded-full glass-card text-white font-semibold hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-xl border border-white/30" style="text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+        <a href="#cover" class="inline-flex items-center px-6 py-3 rounded-full glass-card text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl" style="border: 1px solid rgba(255,255,255,0.3);">
           <i class="fas fa-arrow-up mr-2"></i>
           返回顶部
         </a>
@@ -357,10 +359,8 @@
     </div>
   </footer>
 
-  <!-- 引入自定义JavaScript文件 -->
-  <!-- 核心功能模块：导航、日期、表单持久化、数据导入导出 -->
+  <!-- 引入JavaScript文件 -->
   <script src="script-core.js"></script>
-  <!-- AI生成功能模块：AI智能生成教案、PDF导出 -->
   <script src="script-ai.js"></script>
 </body>
 </html>
