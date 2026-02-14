@@ -32,7 +32,7 @@
         <h3 class="text-2xl font-semibold" style="color: var(--color-accent); letter-spacing: 0.1em;">教案本</h3>
       </div>
       
-      <div class="max-w-2xl mx-auto cover-glass rounded-2xl p-8">
+      <div class="max-w-2xl mx-auto cover-glass p-8">
         <div class="form-group">
           <div class="grid grid-cols-5 items-center">
             <label for="subject" class="col-span-1 text-right pr-6">学科：</label>
@@ -111,7 +111,7 @@
   <section id="lesson" class="py-16" style="background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);">
     <div class="container mx-auto px-4">
       <h2 class="section-title text-2xl font-bold mb-6 pb-3">教案详情</h2>
-      <div class="glass-card rounded-2xl p-8">
+      <div class="glass-card p-8">
         <!-- 备课基础信息 -->
         <div class="mb-8">
           <h3 class="text-xl font-semibold mb-6" style="color: var(--color-primary);">备课信息</h3>
@@ -202,7 +202,7 @@
         <!-- 教学过程 -->
         <div class="mb-8">
           <h3 class="text-xl font-semibold mb-6" style="color: var(--color-primary);">教学过程</h3>
-          <div class="overflow-x-auto rounded-xl p-4" style="background: var(--color-bg-warm);">
+          <div class="overflow-x-auto p-4" style="background: var(--color-bg-warm);">
             <table>
               <thead>
                 <tr>
@@ -234,11 +234,11 @@
 
         <!-- 板书设计 + 教学反思 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="rounded-xl p-6 transition-all duration-300" style="background: var(--color-bg-warm);">
+          <div class="p-6 transition-all duration-300" style="background: var(--color-bg-warm);">
             <h3 class="text-xl font-semibold mb-4" style="color: var(--color-primary);">板书设计</h3>
             <textarea id="blackboard-design" class="w-full h-40" placeholder="输入板书设计"></textarea>
           </div>
-          <div class="rounded-xl p-6 transition-all duration-300" style="background: var(--color-bg-warm);">
+          <div class="p-6 transition-all duration-300" style="background: var(--color-bg-warm);">
             <h3 class="text-xl font-semibold mb-4" style="color: var(--color-primary);">教学反思</h3>
             <textarea id="teaching-reflection" class="w-full h-40" placeholder="输入教学反思"></textarea>
           </div>
@@ -251,7 +251,7 @@
   <section id="directory" class="py-16" style="background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);">
     <div class="container mx-auto px-4">
       <h2 class="section-title text-2xl font-bold mb-6 pb-3">教案目录</h2>
-      <div class="overflow-x-auto glass-card rounded-2xl p-6">
+      <div class="overflow-x-auto glass-card p-6">
         <table>
           <thead>
             <tr>
@@ -326,15 +326,15 @@
     <div class="absolute inset-0 backdrop-blur-xl" style="background: rgba(255,255,255,0.05);"></div>
     
     <!-- 装饰性光晕效果 -->
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-40 animate-pulse" style="background: rgba(43, 108, 176, 0.3);"></div>
-    <div class="absolute top-1/4 right-1/4 w-64 h-64 rounded-full blur-2xl opacity-30 animate-pulse animation-delay-1000" style="background: rgba(255,255,255,0.1);"></div>
-    <div class="absolute bottom-1/4 left-1/4 w-48 h-48 rounded-full blur-xl opacity-25 animate-pulse animation-delay-2000" style="background: rgba(15, 41, 66, 0.2);"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 blur-3xl opacity-40 animate-pulse" style="background: rgba(43, 108, 176, 0.3);"></div>
+    <div class="absolute top-1/4 right-1/4 w-64 h-64 blur-2xl opacity-30 animate-pulse animation-delay-1000" style="background: rgba(255,255,255,0.1);"></div>
+    <div class="absolute bottom-1/4 left-1/4 w-48 h-48 blur-xl opacity-25 animate-pulse animation-delay-2000" style="background: rgba(15, 41, 66, 0.2);"></div>
     
     <!-- 内容层 -->
     <div class="container mx-auto px-4 text-center relative z-10">
       <!-- 主要信息区域 -->
       <div class="max-w-2xl mx-auto mb-8">
-        <div class="glass-card rounded-2xl p-8" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+        <div class="glass-card p-8" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
           <div class="text-center space-y-4">
             <p class="text-2xl font-bold text-white tracking-wide drop-shadow-lg">@厦门九中总务处</p>
             <div class="h-px w-32 mx-auto" style="background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);"></div>
@@ -351,7 +351,7 @@
       
       <!-- 返回顶部按钮 -->
       <div class="mt-6">
-        <a href="#cover" class="inline-flex items-center px-6 py-3 rounded-full glass-card text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl" style="border: 1px solid rgba(255,255,255,0.3);">
+        <a href="#cover" class="inline-flex items-center px-6 py-3 glass-card text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl" style="border: 1px solid rgba(255,255,255,0.3);">
           <i class="fas fa-arrow-up mr-2"></i>
           返回顶部
         </a>
