@@ -15,6 +15,7 @@ export function generateKey(length = 16) {
 
 export function encrypt(text, key) {
   if (!text) return '';
+  if (!key || key.length === 0) { console.warn('crypto: encrypt called with empty key'); return ''; }
   let result = '';
   for (let i = 0; i < text.length; i++) {
     result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
@@ -24,6 +25,7 @@ export function encrypt(text, key) {
 
 export function decrypt(encoded, key) {
   if (!encoded) return '';
+  if (!key || key.length === 0) { console.warn('crypto: decrypt called with empty key'); return ''; }
   try {
     const decoded = decodeURIComponent(atob(encoded));
     let result = '';
@@ -32,6 +34,7 @@ export function decrypt(encoded, key) {
     }
     return result;
   } catch {
+    console.warn('crypto: decryption failed');
     return '';
   }
 }
