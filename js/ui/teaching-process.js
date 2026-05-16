@@ -1,3 +1,7 @@
+import { getConfig } from '../utils/config-loader.js';
+
+const CONFIG = getConfig();
+
 export function init() {
   addControls();
 }
@@ -48,7 +52,7 @@ function removeRow() {
 }
 
 function bindRowPersistence(row) {
-  const prefix = 'lessonPlan_teachingProcess_';
+  const prefix = CONFIG.STORAGE_PREFIX + 'teachingProcess_';
   const tbody = row.closest('tbody');
   if (!tbody) return;
   const rows = tbody.querySelectorAll('tr');
